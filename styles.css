@@ -1,0 +1,41 @@
+body{
+    font-family: 'DM Sans', sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .element-wrapper {
+    width: 698px;
+    margin: 0 auto;
+  }
+  
+  .form-container {
+    background-color: #f2f2f2;
+    /* Additional styles for the form container */
+  }
+
+
+.header{
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 46px;
+}
+
+.subheader{
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+}
+
+.form-container {
+    width: 698px;
+    height: 606px;
+    background-color: #f2f2f2;
+}
