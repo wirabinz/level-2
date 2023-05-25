@@ -20,12 +20,28 @@
   <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
   <script type="text/babel">
-    
+
     const rootElement = document.getElementById("root");
 
     const header = "Get a project quote";
     const subheader =
       "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
+    const StepNumber = props =>
+      <div className="circle">
+        <span className="number">{props.txt}</span>
+      </div>
+
+    const InputChildren = props =>
+      <div class="input-children">
+        <label class="input-title">{props.title}</label>
+        <div class="input-wrapper">
+          <input type="text" class="input-field" placeholder={props.title} />
+          <div class="input-icon">
+            <i class="fas fa-icon">ic</i>
+          </div>
+        </div>
+      </div>
+
 
     const element = (
       <>
@@ -35,23 +51,25 @@
             <div className="subheader">{subheader}</div>
             <div className="form-container">
               <div className="step-marking">
-                <div class="circle">
-                  <span class="number">1</span>
-                </div>
-                <div class="line"></div>
-                <div class="circle">
-                  <span class="number">2</span>
-                </div>
-                <div class="line blue"></div>
-                <div class="circle">
-                  <span class="number">3</span>
-                </div>
-                <div class="line"></div>
-                <div class="circle">
-                  <span class="number">4</span>
-                </div>
+                <StepNumber txt='1' />
+                <div className="line"></div>
+                <StepNumber txt='2' />
+                <div className="line blue"></div>
+                <StepNumber txt='3' />
+                <div className="line"></div>
+                <StepNumber txt='4' />
+              </div>
+              <hr />
+              <div className='form-header'>Contact details</div>
+              <div className='form-subheader'>Lorem ipsum dolor sit amet consectetur adipisc.</div>
+              <div class="input-container">
+                <InputChildren title='Name'/>
+                <InputChildren title='Email'/>
+                <InputChildren title='Phone Number'/>
+                <InputChildren title='Company'/>
               </div>
             </div>
+            <button class="next-step-button">Next Step</button>
           </div>
         </div>
       </>
