@@ -2,41 +2,73 @@ body{
     font-family: 'DM Sans', sans-serif;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-  }
-  
   .element-wrapper {
     width: 698px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  
-  .form-container {
-    background-color: #f2f2f2;
-    /* Additional styles for the form container */
-  }
-
 
 .header{
-    font-family: 'DM Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 34px;
     line-height: 46px;
     text-align: center;
+    color: #170F49;
+    margin:178px 0px 12px;
 }
 
 .subheader{
-    font-family: 'DM Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
     line-height: 30px;
+    text-align: center;
+    width:566px;
+    color:#6F6C90;
+    margin-bottom: 42px;
 }
 
 .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     width: 698px;
     height: 606px;
     background-color: #f2f2f2;
+}
+
+.step-marking {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 470px
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  line-height: 100px;
+  font-size: 24px;
+}
+
+.line {
+  width: 98px;
+  height: 6px;
+  background-color: gray;
+  
+}
+
+.line.blue {
+  background-color: blue;
 }
