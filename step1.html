@@ -38,7 +38,7 @@
         <div class="input-wrapper">
           <input type="text" class="input-field" placeholder={props.title} />
           <div class="input-icon">
-            <i class="fas fa-icon">ic</i>
+            <img src={`images/${props.icon}.svg`} alt={props.icon} />
           </div>
         </div>
       </div>
@@ -64,10 +64,10 @@
               <div className='form-header'>Contact details</div>
               <div className='form-subheader'>Lorem ipsum dolor sit amet consectetur adipisc.</div>
               <div class="input-container">
-                <InputChildren title='Name'/>
-                <InputChildren title='Email'/>
-                <InputChildren title='Phone Number'/>
-                <InputChildren title='Company'/>
+                <InputChildren title='Name' icon='user'/>
+                <InputChildren title='Email' icon='mail'/>
+                <InputChildren title='Phone Number' icon='mobile'/>
+                <InputChildren title='Company' icon='building'/>
               </div>
             </div>
             <button class="next-step-button">Next Step</button>
