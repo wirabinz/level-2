@@ -51,7 +51,7 @@ body{
 .step-marking {
   display: flex;
   justify-content: space-between;
-  margin:0 auto 39px auto;
+  margin: 0 auto 39px auto;
   align-items: center;
   width: 470px;
 }
@@ -63,22 +63,47 @@ body{
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background-color: #4A3AFF;
-  color: white;
-  text-align: center;
   line-height: 100px;
   font-size: 16px;
 }
 
-.line {
-  width: 98px;
-  height: 6px;
-  background-color: gray;
-
+.circle-active {
+  background-color: #4A3AFF;
+  color: #FFFFFF;
 }
 
-.line.blue {
-  background-color: blue;
+.circle-inactive {
+  background-color: #EFF0F6;
+  color: #6F6C90;
+}
+
+.line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 98px;
+  height: 6px;
+  background-color: #EFF0F7;
+  border-radius: 40px;
+}
+
+.progress-bar{
+  height: 6px;
+  background-color: #4A3AFF;
+  border-radius: 40px;
+  z-index: 1;
+}
+
+.zero-bar {
+  flex-grow: 0;
+}
+
+.half-bar {
+  flex-grow: 0.5;
+}
+
+.full-bar {
+  flex-grow: 1;
 }
 
 hr {
@@ -127,10 +152,11 @@ hr {
 .input-wrapper {
   display: flex;
   align-items: center;
-  border: 1px solid #EFF0F6;
+  border: 1px solid #EFF0F7;
   border-radius: 46px;
   height:66px;
   margin-top:18px;
+  box-shadow:0px 2px 6px rgba(19, 18, 66, 0.07); ;
 }
 
 .input-field {
@@ -163,5 +189,6 @@ hr {
   line-height: 20px;
   margin-top:32px ;
   margin-left:auto;
+  box-shadow: 0px 3px 12px rgba(74, 58, 255, 0.18);
 }
 

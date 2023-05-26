@@ -27,9 +27,14 @@
     const subheader =
       "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
     
-      const StepNumber = props =>
-      <div className="circle">
+    const StepNumber = props =>
+      <div className={`circle ${props.active}`}>
         <span className="number">{props.txt}</span>
+      </div>
+
+    const ProgressBar = props =>
+      <div className="line">
+          <div className={`progress-bar ${props.percentage}-bar`}></div>
       </div>
 
     const InputChildren = props =>
@@ -52,18 +57,18 @@
             <div className="subheader">{subheader}</div>
             <div className="form-container">
               <div className="step-marking">
-                <StepNumber txt='1' />
-                <div className="line"></div>
-                <StepNumber txt='2' />
-                <div className="line blue"></div>
-                <StepNumber txt='3' />
-                <div className="line"></div>
-                <StepNumber txt='4' />
+                <StepNumber txt='1' active='circle-active' />
+                <ProgressBar percentage='half' />
+                <StepNumber txt='2' active='circle-inactive'/>
+                <ProgressBar percentage='zero' />
+                <StepNumber txt='3' active='circle-inactive'/>
+                <ProgressBar percentage='zero' />
+                <StepNumber txt='4' active='circle-inactive'/>
               </div>
               <hr />
               <div className='form-header'>Contact details</div>
               <div className='form-subheader'>Lorem ipsum dolor sit amet consectetur adipisc.</div>
-              <div class="input-container">
+              <div className="input-container">
                 <InputChildren title='Name' icon='user'/>
                 <InputChildren title='Email' icon='mail'/>
                 <InputChildren title='Phone Number' icon='mobile'/>
