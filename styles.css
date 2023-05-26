@@ -1,6 +1,6 @@
 body{
     font-family: 'DM Sans', sans-serif;
-    
+    background-color: #FFFFFF;
 }
 
   .element-wrapper {
@@ -10,7 +10,6 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #FFFFFF;
   }
 
 .header{
