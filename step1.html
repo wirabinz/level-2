@@ -20,14 +20,13 @@
   <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
   <script type="text/babel">
+    const { useState } = React;
 
     const rootElement = document.getElementById("root");
 
     const header = "Get a project quote";
     const subheader =
       "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
-
-
 
     const StepNumber = props =>
       <div className={`circle ${props.active}`}>
@@ -38,8 +37,8 @@
     // <div className="line">
     // <div className={`progress-bar ${props.percentage}-bar`}></div>
     // </div>
-    
-     // const InputChildren = props =>
+
+    // const InputChildren = props =>
     // <div class="input-children">
     // <label class="input-title">{props.title}</label>
     // <div class="input-wrapper">
@@ -61,16 +60,33 @@
 
     function InputGroup({ title, icon, className = '', ...rest }) {
       const iconLink = icon ? `images/${icon}.svg` : ''
-      const iconText =
-        <div className='input-icon'>
-          <img src={iconLink} alt={icon} />
-        </div>
+
+      const [isFocused, setIsFocused] = useState(false);
+
+      const handleFocused = () => {
+        setIsFocused(true)
+      };
+
+      const handleBlur = () => {
+        setIsFocused(false);
+      };
+
+      const focusedClassName = `${isFocused ? 'focused' : ''}`;
+
       return (
         <div className="input-children">
-          <label className="input-title">{title}</label>
-          <div className="input-wrapper">
-            <input type="text" className="input-field" placeholder={title} />
-            {iconText}
+          <label className={`${focusedClassName} input-title`}>{title}</label>
+          <div className={`input-wrapper ${focusedClassName}`}>
+            <input
+              type="text"
+              className="input-field"
+              placeholder={title}
+              onFocus={handleFocused}
+              onBlur={handleBlur}
+            />
+            <div className='input-icon'>
+              <img src={iconLink} alt={icon} />
+            </div>
           </div>
         </div>
       )
@@ -102,7 +118,7 @@
                 <InputGroup title='Company' icon='building' />
               </div>
             </div>
-            <button class="next-step-button">Next Step</button>
+            <button className="next-step-button">Next Step</button>
           </div>
         </div>
       </>
