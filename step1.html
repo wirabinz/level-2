@@ -26,28 +26,55 @@
     const header = "Get a project quote";
     const subheader =
       "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
-    
+
+
+
     const StepNumber = props =>
       <div className={`circle ${props.active}`}>
         <span className="number">{props.txt}</span>
       </div>
 
-    const ProgressBar = props =>
-      <div className="line">
-          <div className={`progress-bar ${props.percentage}-bar`}></div>
-      </div>
+    // const ProgressBar = props =>
+    // <div className="line">
+    // <div className={`progress-bar ${props.percentage}-bar`}></div>
+    // </div>
+    
+     // const InputChildren = props =>
+    // <div class="input-children">
+    // <label class="input-title">{props.title}</label>
+    // <div class="input-wrapper">
+    // <input type="text" class="input-field" placeholder={props.title} />
+    // <div class="input-icon">
+    // <img src={`images/${props.icon}.svg`} alt={props.icon} />
+    // </div>
+    // </div>
+    // </div>
 
-    const InputChildren = props =>
-      <div class="input-children">
-        <label class="input-title">{props.title}</label>
-        <div class="input-wrapper">
-          <input type="text" class="input-field" placeholder={props.title} />
-          <div class="input-icon">
-            <img src={`images/${props.icon}.svg`} alt={props.icon} />
+    function ProgressBar({ percentage, className = '', ...rest }) {
+      const progressLength = percentage ? `${percentage}-bar` : ''
+      return (
+        <div className="line">
+          <div className={`progress-bar ${progressLength}`} {...rest}></div>
+        </div>
+      );
+    }
+
+    function InputGroup({ title, icon, className = '', ...rest }) {
+      const iconLink = icon ? `images/${icon}.svg` : ''
+      const iconText =
+        <div className='input-icon'>
+          <img src={iconLink} alt={icon} />
+        </div>
+      return (
+        <div className="input-children">
+          <label className="input-title">{title}</label>
+          <div className="input-wrapper">
+            <input type="text" className="input-field" placeholder={title} />
+            {iconText}
           </div>
         </div>
-      </div>
-
+      )
+    }
 
     const element = (
       <>
@@ -59,20 +86,20 @@
               <div className="step-marking">
                 <StepNumber txt='1' active='circle-active' />
                 <ProgressBar percentage='half' />
-                <StepNumber txt='2' active='circle-inactive'/>
+                <StepNumber txt='2' active='circle-inactive' />
                 <ProgressBar percentage='zero' />
-                <StepNumber txt='3' active='circle-inactive'/>
+                <StepNumber txt='3' active='circle-inactive' />
                 <ProgressBar percentage='zero' />
-                <StepNumber txt='4' active='circle-inactive'/>
+                <StepNumber txt='4' active='circle-inactive' />
               </div>
               <hr />
               <div className='form-header'>Contact details</div>
               <div className='form-subheader'>Lorem ipsum dolor sit amet consectetur adipisc.</div>
               <div className="input-container">
-                <InputChildren title='Name' icon='user'/>
-                <InputChildren title='Email' icon='mail'/>
-                <InputChildren title='Phone Number' icon='mobile'/>
-                <InputChildren title='Company' icon='building'/>
+                <InputGroup title='Name' icon='user' />
+                <InputGroup title='Email' icon='mail' />
+                <InputGroup title='Phone Number' icon='mobile' />
+                <InputGroup title='Company' icon='building' />
               </div>
             </div>
             <button class="next-step-button">Next Step</button>
