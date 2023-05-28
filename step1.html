@@ -20,7 +20,7 @@
   <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
     const rootElement = document.getElementById("root");
 
@@ -33,22 +33,6 @@
         <span className="number">{props.txt}</span>
       </div>
 
-    // const ProgressBar = props =>
-    // <div className="line">
-    // <div className={`progress-bar ${props.percentage}-bar`}></div>
-    // </div>
-
-    // const InputChildren = props =>
-    // <div class="input-children">
-    // <label class="input-title">{props.title}</label>
-    // <div class="input-wrapper">
-    // <input type="text" class="input-field" placeholder={props.title} />
-    // <div class="input-icon">
-    // <img src={`images/${props.icon}.svg`} alt={props.icon} />
-    // </div>
-    // </div>
-    // </div>
-
     function ProgressBar({ percentage, className = '', ...rest }) {
       const progressLength = percentage ? `${percentage}-bar` : ''
       return (
@@ -58,10 +42,13 @@
       );
     }
 
-    function InputGroup({ title, icon, className = '', ...rest }) {
+    function InputGroup({ title, icon, value, setValue, email, phone, className = '', ...rest }) {
       const iconLink = icon ? `images/${icon}.svg` : ''
 
+      //=========Input field focus function==========
       const [isFocused, setIsFocused] = useState(false);
+      const [isEmailValid, setIsEmailValid] = useState(true);
+      const [isPhoneValid, setIsPhoneValid] = useState(true);
 
       const handleFocused = () => {
         setIsFocused(true)
@@ -69,62 +56,103 @@
 
       const handleBlur = () => {
         setIsFocused(false);
+
+        if (value && value === email) {
+          if (!value.endsWith('@gmail.com')) {
+            setIsEmailValid(false);
+          } else {
+            setIsEmailValid(true);
+          }
+        }
+
+        if (value && value === phone) {
+          const phoneNumber = value.slice(2); // Remove the first two digits
+          if (value.startsWith('08') && /^\d{8,12}$/.test(phoneNumber) && phoneNumber.length >= 10 && phoneNumber.length <= 14) {
+            setIsPhoneValid(true);
+          } else {
+            setIsPhoneValid(false);
+          }
+        }
       };
+
 
       const focusedClassName = `${isFocused ? 'focused' : ''}`;
 
       return (
         <div className="input-children">
-          <label className={`${focusedClassName} input-title`}>{title}</label>
-          <div className={`input-wrapper ${focusedClassName}`}>
+          <label className={`${focusedClassName} input-title ${!isEmailValid || !isPhoneValid ? 'invalid' : ''}`}>{title}</label>
+          <div className={`input-wrapper ${focusedClassName} `}>
             <input
               type="text"
-              className="input-field"
+              className={`input-field ${!isEmailValid || !isPhoneValid ? 'invalid' : ''}`}
               placeholder={title}
               onFocus={handleFocused}
               onBlur={handleBlur}
+              value={value}
+              onChange={(event) => setValue(event.target.value)}
             />
             <div className='input-icon'>
               <img src={iconLink} alt={icon} />
             </div>
+            {!isEmailValid && value === email && (
+              <div className="error-message">Invalid email format.</div>
+            )}
+            {!isPhoneValid && value === phone && (
+              <div className="error-message">Invalid phone number.</div>
+            )}
           </div>
         </div>
       )
     }
 
-    const element = (
-      <>
-        <div className="container">
-          <div className="element-wrapper">
-            <div className='header'>{header}</div>
-            <div className="subheader">{subheader}</div>
-            <div className="form-container">
-              <div className="step-marking">
-                <StepNumber txt='1' active='circle-active' />
-                <ProgressBar percentage='half' />
-                <StepNumber txt='2' active='circle-inactive' />
-                <ProgressBar percentage='zero' />
-                <StepNumber txt='3' active='circle-inactive' />
-                <ProgressBar percentage='zero' />
-                <StepNumber txt='4' active='circle-inactive' />
-              </div>
-              <hr />
-              <div className='form-header'>Contact details</div>
-              <div className='form-subheader'>Lorem ipsum dolor sit amet consectetur adipisc.</div>
-              <div className="input-container">
-                <InputGroup title='Name' icon='user' />
-                <InputGroup title='Email' icon='mail' />
-                <InputGroup title='Phone Number' icon='mobile' />
-                <InputGroup title='Company' icon='building' />
-              </div>
-            </div>
-            <button className="next-step-button">Next Step</button>
-          </div>
-        </div>
-      </>
-    );
+    const useInputState = (initialValue = '') => {
+      const [value, setValue] = useState(initialValue);
+      return [value, setValue];
+    };
 
-    ReactDOM.render(element, rootElement);
+
+    const App = () => {
+
+      //==============useState function ======== 
+      const [name, setName] = useInputState('');
+      const [email, setEmail] = useInputState('');
+      const [phone, setPhone] = useInputState('');
+      const [company, setCompany] = useInputState('');
+
+      return (
+        <>
+          <div className="container">
+            <div className="element-wrapper">
+              <div className='header'>{header}</div>
+              <div className="subheader">{subheader}</div>
+              <div className="form-container">
+                <div className="step-marking">
+                  <StepNumber txt='1' active='circle-active' />
+                  <ProgressBar percentage='half' />
+                  <StepNumber txt='2' active='circle-inactive' />
+                  <ProgressBar percentage='zero' />
+                  <StepNumber txt='3' active='circle-inactive' />
+                  <ProgressBar percentage='zero' />
+                  <StepNumber txt='4' active='circle-inactive' />
+                </div>
+                <hr />
+                <div className='form-header'>Contact details</div>
+                <div className='form-subheader'>Lorem ipsum dolor sit amet consectetur adipisc.</div>
+                <div className="input-container">
+                  <InputGroup title='Name' icon='user' value={name} setValue={setName} />
+                  <InputGroup title='Email' icon='mail' value={email} setValue={setEmail} email={email} />
+                  <InputGroup title='Phone Number' icon='mobile' value={phone} setValue={setPhone} phone={phone} />
+                  <InputGroup title='Company' icon='building' value={company} setValue={setCompany} />
+                </div>
+              </div>
+              <button className="next-step-button">Next Step</button>
+            </div>
+          </div>
+        </>
+      )
+    }
+
+    ReactDOM.render(<App />, rootElement);
   </script>
 </body>
 
