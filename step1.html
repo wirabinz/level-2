@@ -109,14 +109,23 @@
       )
     }
 
+    function ServiceMenu({icon,service, className='', ...rest}){
+      const iconLink = icon ? `images/${icon}.svg` : ''
+      return (
+        <menu className ='service-button'>
+          <div className= 'service-icon-base'>
+            <img src={iconLink} alt={icon} />
+          </div>
+          <div className='service'>{service}</div> 
+        </menu>
+      )
+    }
+
+
     const useInputState = (initialValue = '') => {
       const [value, setValue] = useState(initialValue);
       return [value, setValue];
     };
-
-    //===============Pagination Function================
-
-
 
     //==============Elements Stacking App============
 
@@ -139,7 +148,7 @@
 
       useEffect(() => {
         console.log('check useEffect');
-        window.localStorage.setItem('page', currentPage)
+        window.localStorage.setItem('page', currentPage);
       }, [currentPage]);
 
 
@@ -168,12 +177,22 @@
                 <hr />
                 <div className='form-header'>{header}</div>
                 <div className='form-subheader'>{subheader}</div>
-                <div className="input-container">
-                  <InputGroup title='Name' icon='user' value={name} setValue={setName} />
-                  <InputGroup title='Email' icon='mail' value={email} setValue={setEmail} email={email} />
-                  <InputGroup title='Phone Number' icon='mobile' value={phone} setValue={setPhone} phone={phone} />
-                  <InputGroup title='Company' icon='building' value={company} setValue={setCompany} />
-                </div>
+                {currentPage === 1 && (
+                  <div className="input-container">
+                    <InputGroup title='Name' icon='user' value={name} setValue={setName} />
+                    <InputGroup title='Email' icon='mail' value={email} setValue={setEmail} email={email} />
+                    <InputGroup title='Phone Number' icon='mobile' value={phone} setValue={setPhone} phone={phone} />
+                    <InputGroup title='Company' icon='building' value={company} setValue={setCompany} />
+                  </div>
+                )}
+                {currentPage === 2 && (
+                  <div className="service-container">
+                    <ServiceMenu icon='development' service='Development'/>
+                    <ServiceMenu icon='webdesign' service='Web Design'/>
+                    <ServiceMenu icon='marketing' service='Marketing'/>
+                    <ServiceMenu icon='other' service='Other'/>
+                  </div>
+                )}
               </div>
               <button className="next-step-button" onClick={handleNextStep}>Next Step</button>
             </div>
