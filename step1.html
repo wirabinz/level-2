@@ -19,6 +19,7 @@
   <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+  <script src="script.js"></script>
   <script type="text/babel">
     const { useState, useEffect } = React;
 
@@ -30,7 +31,7 @@
 
     const StepNumber = props =>
       <div className={`circle ${props.active}`}>
-        <span className="number">{props.txt}</span>
+        <span className="number">{props.page}</span>
       </div>
 
     function ProgressBar({ percentage, className = '', ...rest }) {
@@ -75,7 +76,6 @@
         }
       };
 
-
       const focusedClassName = `${isFocused ? 'focused' : ''}`;
 
       return (
@@ -110,10 +110,21 @@
       return [value, setValue];
     };
 
+    //===============Pagination Function================
+
+    const handleNextStep = (currentPage, setCurrentPage) => {
+      if (currentPage < 4) {
+        setCurrentPage(currentPage + 1);
+        console.log(currentPage)
+      }
+    };
 
     const App = () => {
+      //============useState Pagination======
+      const [currentPage, setCurrentPage] = useState(1);
 
-      //==============useState function ======== 
+
+      //==============useState Input Field======== 
       const [name, setName] = useInputState('');
       const [email, setEmail] = useInputState('');
       const [phone, setPhone] = useInputState('');
@@ -127,13 +138,13 @@
               <div className="subheader">{subheader}</div>
               <div className="form-container">
                 <div className="step-marking">
-                  <StepNumber txt='1' active='circle-active' />
+                  <StepNumber page='1' active='circle-active' />
                   <ProgressBar percentage='half' />
-                  <StepNumber txt='2' active='circle-inactive' />
+                  <StepNumber page='2' active='circle-inactive' />
                   <ProgressBar percentage='zero' />
-                  <StepNumber txt='3' active='circle-inactive' />
+                  <StepNumber page='3' active='circle-inactive' />
                   <ProgressBar percentage='zero' />
-                  <StepNumber txt='4' active='circle-inactive' />
+                  <StepNumber page='4' active='circle-inactive' />
                 </div>
                 <hr />
                 <div className='form-header'>Contact details</div>
@@ -145,7 +156,7 @@
                   <InputGroup title='Company' icon='building' value={company} setValue={setCompany} />
                 </div>
               </div>
-              <button className="next-step-button">Next Step</button>
+              <button className="next-step-button" onClick={handleNextStep}>Next Step</button>
             </div>
           </div>
         </>
