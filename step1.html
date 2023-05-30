@@ -112,20 +112,30 @@
 
     function ServiceMenu({ icon, service, className = '', ...rest }) {
       const iconLink = icon ? `images/${icon}.svg` : '';
-      const [selected, setSelected] = useState(false);
+      const [selectedService, setSelectedService] = useState('');
 
       const handleClick = () => {
-        setSelected(true);
+        setSelectedService((prevSelectedService) => (prevSelectedService === service ? '' : service));
       };
 
       return (
-        <label className={`service-button ${className} ${selected ? 'selected' : ''}`} onClick={handleClick}>
-          <input type="radio" name="service" className="service-radio" />
+        <div
+          className={`service-button ${className} ${selectedService === service ? 'selected' : ''}`}
+          onClick={handleClick}
+        >
+          <input
+            type="radio"
+            name="service"
+            className="service-radio"
+            checked={selectedService === service}
+            onChange={() => { }}
+            style={{ display: 'none' }}
+          />
           <div className="service-icon-base">
             <img src={iconLink} alt={icon} />
           </div>
           <div className="service">{service}</div>
-        </label>
+        </div>
       );
     }
 
