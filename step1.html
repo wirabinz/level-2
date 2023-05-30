@@ -109,17 +109,28 @@
       )
     }
 
-    function ServiceMenu({icon,service, className='', ...rest}){
-      const iconLink = icon ? `images/${icon}.svg` : ''
+
+    function ServiceMenu({ icon, service, className = '', ...rest }) {
+      const iconLink = icon ? `images/${icon}.svg` : '';
+      const [selected, setSelected] = useState(false);
+
+      const handleClick = () => {
+        setSelected(true);
+      };
+
       return (
-        <menu className ='service-button'>
-          <div className= 'service-icon-base'>
+        <label className={`service-button ${className} ${selected ? 'selected' : ''}`} onClick={handleClick}>
+          <input type="radio" name="service" className="service-radio" />
+          <div className="service-icon-base">
             <img src={iconLink} alt={icon} />
           </div>
-          <div className='service'>{service}</div> 
-        </menu>
-      )
+          <div className="service">{service}</div>
+        </label>
+      );
     }
+
+
+
 
     const useInputState = (initialValue = '') => {
       const [value, setValue] = useState(initialValue);
@@ -129,6 +140,7 @@
     //==============Elements Stacking App============
 
     const App = () => {
+
       //============useState Pagination======
       const [currentPage, setCurrentPage] = useState(1);
       const [header, setHeader] = useState(pagesData[1].header)
@@ -145,10 +157,23 @@
         }
       };
 
+      const handlePreviousStep = () => {
+        if (currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+          // Update header and subheader based on currentPage
+          const { header, subheader } = pagesData[currentPage - 1];
+          setHeader(header);
+          setSubheader(subheader);
+        }
+      };
+
       useEffect(() => {
         console.log('check useEffect');
         window.localStorage.setItem('page', currentPage);
       }, [currentPage]);
+
+      //============Page Navigation Button =============
+
 
 
       //==============useState Input Field======== 
@@ -156,6 +181,8 @@
       const [email, setEmail] = useInputState('');
       const [phone, setPhone] = useInputState('');
       const [company, setCompany] = useInputState('');
+
+
 
       return (
         <>
@@ -186,14 +213,21 @@
                 )}
                 {currentPage === 2 && (
                   <div className="service-container">
-                    <ServiceMenu icon='development' service='Development'/>
-                    <ServiceMenu icon='webdesign' service='Web Design'/>
-                    <ServiceMenu icon='marketing' service='Marketing'/>
-                    <ServiceMenu icon='other' service='Other'/>
+                    <ServiceMenu icon='development' service='Development' />
+                    <ServiceMenu icon='webdesign' service='Web Design' />
+                    <ServiceMenu icon='marketing' service='Marketing' />
+                    <ServiceMenu icon='other' service='Other' />
                   </div>
                 )}
               </div>
-              <button className="next-step-button" onClick={handleNextStep}>Next Step</button>
+              <div className='page-navigation'>
+                {currentPage > 1 && (
+                  <button className="previous-step-button" onClick={handlePreviousStep}>Previous step</button>
+                )}
+                {currentPage < 4 && (
+                  <button className="next-step-button" onClick={handleNextStep}>Next step</button>
+                )}
+              </div>
             </div>
           </div>
         </>

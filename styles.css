@@ -35,7 +35,6 @@ body{
 
 .form-container {
     display: flex;
-    justify-content: center;
     align-items: flex-start;
     flex-direction: column;
     width: 698px;
@@ -50,9 +49,9 @@ body{
 .step-marking {
   display: flex;
   justify-content: space-between;
-  margin: 0 auto 39px auto;
   align-items: center;
   width: 470px;
+  margin: 33px auto 32px;
 }
 
 .circle {
@@ -118,6 +117,7 @@ hr {
   font-size:24px;
   line-height: 35px;
   margin-left:46px;
+  margin-top:64px;
 }
 
 .form-subheader{
@@ -195,25 +195,6 @@ hr {
   margin-right:20px;
 }
 
-/* .fa-icon {
-  /* Replace with your desired icon styles */
-/*} */
-
-.next-step-button {
-  background-color: #4A3AFF;
-  color: #FFFFFF;
-  border: none;
-  padding: 20px 40px 21px;
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: 56px;
-  cursor: pointer;
-  line-height: 20px;
-  margin-top:32px ;
-  margin-left:auto;
-  box-shadow: 0px 3px 12px rgba(74, 58, 255, 0.18);
-}
-
 .service-container{
   display:flex;
   flex-flow:row wrap;
@@ -233,6 +214,18 @@ hr {
   margin-right:28px;
   padding:26px;
 } 
+
+.service-button.selected {
+  border: 2px solid #4A3AFF;
+}
+
+.service-button.selected .service-icon-base {
+  background-color: rgba(74, 58, 255, 0.15);
+}
+
+.service-button.selected .service {
+  color: #4A3AFF;
+}
 
 .service-icon-base {
   position: relative;
@@ -257,4 +250,37 @@ hr {
   font-weight: 500;
   font-size:18px;
   margin-left:12px;
+}
+
+.page-navigation {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 32px;
+  width: 100%;
+}
+
+.previous-step-button {
+  width:192px;
+  height: 60px;
+  border:1px solid #4A3AFF;
+  border-radius:66px;
+  background-color: #FFFFFF;
+  color:#4A3AFF;
+  font-weight:400;
+  font-size:18px;
+  margin-right: auto;
+}
+
+.next-step-button {
+  background-color: #4A3AFF;
+  color: #FFFFFF;
+  border: none;
+  padding: 20px 40px 21px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 56px;
+  cursor: pointer;
+  line-height: 20px;
+  box-shadow: 0px 3px 12px rgba(74, 58, 255, 0.18);
 }
