@@ -195,14 +195,14 @@ hr {
   margin-right:20px;
 }
 
-.service-container{
+.service-container, .budget-container{
   display:flex;
   flex-flow:row wrap;
   margin-top:39px;
   margin-left: 46px;;
 }
 
-.service-button{
+.service-button, .budget-button{
   display:flex;
   align-items: center;
   width:284px;
@@ -213,6 +213,7 @@ hr {
   box-sizing:border-box;
   margin-right:28px;
   padding:26px;
+  margin-bottom:21px;
 } 
 
 .service-button.selected {

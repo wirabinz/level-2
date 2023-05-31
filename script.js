@@ -16,7 +16,3 @@ const pagesData = {
     },
 }
 
-
-
-
-// Export the pagesData object

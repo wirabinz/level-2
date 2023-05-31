@@ -110,24 +110,19 @@
     }
 
 
-    function ServiceMenu({ icon, service, className = '', ...rest }) {
+    function ServiceMenu({ icon, service, className = '', selected, handleClick }) {
       const iconLink = icon ? `images/${icon}.svg` : '';
-      const [selectedService, setSelectedService] = useState('');
-
-      const handleClick = () => {
-        setSelectedService((prevSelectedService) => (prevSelectedService === service ? '' : service));
-      };
 
       return (
         <div
-          className={`service-button ${className} ${selectedService === service ? 'selected' : ''}`}
+          className={`service-button ${className} ${selected ? 'selected' : ''}`}
           onClick={handleClick}
         >
           <input
             type="radio"
             name="service"
             className="service-radio"
-            checked={selectedService === service}
+            checked={selected}
             onChange={() => { }}
             style={{ display: 'none' }}
           />
@@ -139,15 +134,23 @@
       );
     }
 
+    function BudgetMenu({budget, className = '' }) {
 
-
+      return (
+        <div className='budget-button'>
+          <input type="radio"/>
+          <label className="budget-option">{budget}</label>
+        </div>
+      )
+    }
 
     const useInputState = (initialValue = '') => {
       const [value, setValue] = useState(initialValue);
       return [value, setValue];
     };
 
-    //==============Elements Stacking App============
+
+    //===================== Elements Stacking App ========================
 
     const App = () => {
 
@@ -193,6 +196,16 @@
       const [company, setCompany] = useInputState('');
 
 
+      //=============Service Menu Selection================
+      const [selectedService, setSelectedService] = useState('');
+
+      const handleServiceSelect = (service) => {
+        setSelectedService(service);
+      };
+
+      const isServiceSelected = (service) => {
+        return selectedService === service;
+      };
 
       return (
         <>
@@ -223,10 +236,38 @@
                 )}
                 {currentPage === 2 && (
                   <div className="service-container">
-                    <ServiceMenu icon='development' service='Development' />
-                    <ServiceMenu icon='webdesign' service='Web Design' />
-                    <ServiceMenu icon='marketing' service='Marketing' />
-                    <ServiceMenu icon='other' service='Other' />
+                    <ServiceMenu
+                      icon="development"
+                      service="Development"
+                      selected={isServiceSelected('Development')}
+                      handleClick={() => handleServiceSelect('Development')}
+                    />
+                    <ServiceMenu
+                      icon="webdesign"
+                      service="Web Design"
+                      selected={isServiceSelected('Web Design')}
+                      handleClick={() => handleServiceSelect('Web Design')}
+                    />
+                    <ServiceMenu
+                      icon="marketing"
+                      service="Marketing"
+                      selected={isServiceSelected('Marketing')}
+                      handleClick={() => handleServiceSelect('Marketing')}
+                    />
+                    <ServiceMenu
+                      icon="other"
+                      service="Other"
+                      selected={isServiceSelected('Other')}
+                      handleClick={() => handleServiceSelect('Other')}
+                    />
+                  </div>
+                )}
+                {currentPage === 3 && (
+                  <div className="budget-container">
+                    <BudgetMenu budget="$5.000-$10.000"/>
+                    <BudgetMenu budget="$10.000-$20.000"/>
+                    <BudgetMenu budget="$20.000-$50.000"/>
+                    <BudgetMenu budget="$50.000+"/>
                   </div>
                 )}
               </div>
