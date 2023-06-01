@@ -47,13 +47,16 @@
       );
     }
 
-    function InputGroup({ title, icon, value, setValue, email, phone, className = '', ...rest }) {
+    function InputGroup({ title, icon, value, setValue, name, email, phone, company, className = '', ...rest }) {
       const iconLink = icon ? `images/${icon}.svg` : ''
 
       //=========Input field focus function==========
       const [isFocused, setIsFocused] = useState(false);
+
+      const [isNameValid, setIsNameValid] = useState(true);
       const [isEmailValid, setIsEmailValid] = useState(true);
       const [isPhoneValid, setIsPhoneValid] = useState(true);
+      const [isCompanyValid, setIsCompanyValid] = useState(true);
 
       const handleFocused = () => {
         setIsFocused(true)
@@ -80,6 +83,8 @@
         }
       };
 
+
+
       const focusedClassName = `${isFocused ? 'focused' : ''}`;
 
       return (
@@ -88,11 +93,12 @@
           <div className={`input-wrapper ${focusedClassName} `}>
             <input
               type="text"
-              className={`input-field ${!isEmailValid || !isPhoneValid ? 'invalid' : ''}`}
+              className={`input-field ${(!isEmailValid || !isPhoneValid || !isNameValid || !isCompanyValid) ? 'invalid' : ''}`}
               placeholder={title}
               onFocus={handleFocused}
               onBlur={handleBlur}
               value={value}
+
               onChange={(event) => setValue(event.target.value)}
             />
             <div className='input-icon'>
@@ -134,11 +140,21 @@
       );
     }
 
-    function BudgetMenu({budget, className = '' }) {
+    function BudgetMenu({ budget, className = '', selected, handleClick }) {
 
       return (
-        <div className='budget-button'>
-          <input type="radio"/>
+        <div
+          className={`budget-button ${className} ${selected ? 'selected' : ''}`}
+          onClick={handleClick}
+        >
+          <input
+            type="radio"
+            name="service"
+            className="service-radio custom-radio"
+            checked={selected}
+            onChange={() => { }}
+
+          />
           <label className="budget-option">{budget}</label>
         </div>
       )
@@ -161,7 +177,10 @@
 
       //===============Pagination Function================
       const handleNextStep = () => {
-        if (currentPage < 4) {
+
+
+
+        if (currentPage <= 4) {
           setCurrentPage(currentPage + 1);
           // Update header and subheader based on currentPage
           const { header, subheader } = pagesData[currentPage + 1];
@@ -181,11 +200,13 @@
       };
 
       useEffect(() => {
-        console.log('check useEffect');
+        console.log(selectedService);
+        console.log(selectedBudget);
         window.localStorage.setItem('page', currentPage);
+        window.localStorage.setItem('Service', selectedService);
+        window.localStorage.setItem('Budget', selectedBudget);
+        window.localStorage.setItem('name', name);
       }, [currentPage]);
-
-      //============Page Navigation Button =============
 
 
 
@@ -206,6 +227,18 @@
       const isServiceSelected = (service) => {
         return selectedService === service;
       };
+
+      //============Budget Menu Selection===================
+
+      const [selectedBudget, setSelectedBudget] = useState('');
+
+      const handleBudgetSelect = (service) => {
+        setSelectedBudget(service);
+      };
+
+      const isBudgetSelected = (service) => {
+        return selectedBudget === service;
+      }
 
       return (
         <>
@@ -264,10 +297,26 @@
                 )}
                 {currentPage === 3 && (
                   <div className="budget-container">
-                    <BudgetMenu budget="$5.000-$10.000"/>
-                    <BudgetMenu budget="$10.000-$20.000"/>
-                    <BudgetMenu budget="$20.000-$50.000"/>
-                    <BudgetMenu budget="$50.000+"/>
+                    <BudgetMenu
+                      budget="$5.0000-$10.000"
+                      selected={isBudgetSelected('$5.0000-$10.000')}
+                      handleClick={() => handleBudgetSelect('$5.0000-$10.000')}
+                    />
+                    <BudgetMenu
+                      budget="$10.000-$20.000"
+                      selected={isBudgetSelected('$10.000-$20.000')}
+                      handleClick={() => handleBudgetSelect('$10.000-$20.000')}
+                    />
+                    <BudgetMenu
+                      budget="20.000-$50.000"
+                      selected={isBudgetSelected('20.000-$50.000')}
+                      handleClick={() => handleBudgetSelect('20.000-$50.000')}
+                    />
+                    <BudgetMenu
+                      budget="50.000+"
+                      selected={isBudgetSelected('50.000+')}
+                      handleClick={() => handleBudgetSelect('50.000+')}
+                    />
                   </div>
                 )}
               </div>

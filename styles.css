@@ -216,7 +216,7 @@ hr {
   margin-bottom:21px;
 } 
 
-.service-button.selected {
+.service-button.selected, .budget-button.selected{
   border: 2px solid #4A3AFF;
 }
 
@@ -254,6 +254,29 @@ hr {
   margin-left:12px;
 }
 
+
+.custom-radio {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1.2px solid #D9DBE9;
+  box-shadow: inset 0px -3px 7px rgba(20, 20, 43, 0.08);
+}
+
+input.service-radio:checked + .custom-radio {
+  background-color: #4A3AFF;
+  border-color: #4A3AFF;
+}
+
+
+.budget-option{
+  font-weight: 500;
+  font-size:18px;
+  color:#170F49;
+  margin-left: 13px;
+}
+
 .page-navigation {
   display: flex;
   justify-content: flex-end;
@@ -272,6 +295,7 @@ hr {
   font-weight:400;
   font-size:18px;
   margin-right: auto;
+  cursor:pointer;
 }
 
 .next-step-button {
