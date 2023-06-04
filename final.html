@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Playfair+Display&family=Poppins:wght@300;400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+  <script src="script.js"></script>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const rootElement = document.getElementById("root");
+
+    const appHeader = "Get a project quote";
+    const appSubheader =
+      "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
+
+    const PageNumber = ({ page, active }) => {
+      const isActive = active === 'circle-active';
+
+      return (
+        <div className={`circle ${isActive ? 'circle-active' : 'circle-inactive'}`}>
+          <span className={`number ${isActive ? 'active' : ''}`}>{page}</span>
+        </div>
+      );
+    };
+
+    function ProgressBar({ percentage, className = '', ...rest }) {
+      const progressLength = percentage ? `${percentage}-bar` : ''
+      return (
+        <div className="line">
+          <div className={`progress-bar ${progressLength}`} {...rest}></div>
+        </div>
+      );
+    }
+
+    // ========================= Input Form Module ========================== //
+    function InputGroup({ title, icon, className = '', handleChange, value, isValid, isEmailValid, errorMessage }) {
+      const iconLink = icon ? `images/${icon}.svg` : ''
+
+      //=========Input field focus function==========
+      const [isFocused, setIsFocused] = useState(false);
+
+      const handleFocused = () => {
+        setIsFocused(true)
+      };
+
+      const handleBlur = () => {
+        setIsFocused(false);
+      };
+
+      const focusedClassName = isFocused ? 'focused' : '';
+      const validityClassName = isValid === false ? 'invalid' : '';
+
+      return (
+        <div className="input-children">
+          <label className={`${focusedClassName} ${validityClassName} input-title `}>{title}</label>
+          <div className={`input-wrapper ${focusedClassName} ${validityClassName}`}>
+            <input
+              type="text"
+              className={`input-field ${validityClassName} `}
+              placeholder={title}
+              onFocus={handleFocused}
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+            <div className='input-icon'>
+              <img src={iconLink} alt={icon} />
+            </div>
+            {(isValid === false) && (
+              <div className="error-message">{errorMessage}</div>
+            )}
+
+          </div>
+        </div>
+      )
+    }
+
+    //========================Service Menu Module ===============================//
+    function ServiceMenu({ icon, service, className = '', selected, handleClick }) {
+      const iconLink = icon ? `images/${icon}.svg` : '';
+
+      return (
+        <div
+          className={`service-button ${className} ${selected ? 'selected' : ''}`}
+          onClick={handleClick}
+        >
+          <input
+            type="radio"
+            name="service"
+            className="service-radio"
+            checked={selected}
+            onChange={() => { }}
+            style={{ display: 'none' }}
+          />
+          <div className="service-icon-base">
+            <img src={iconLink} alt={icon} />
+          </div>
+          <div className="service">{service}</div>
+        </div>
+      );
+    }
+
+    //========================Budget Menu Module ===============================//
+    function BudgetMenu({ budget, className = '', selected, handleClick }) {
+
+      return (
+        <div
+          className={`budget-button ${className} ${selected ? 'selected' : ''}`}
+          onClick={handleClick}
+        >
+          <input
+            type="radio"
+            name="service"
+            className="service-radio custom-radio"
+            checked={selected}
+            onChange={() => { }}
+
+          />
+          <label className="budget-option">{budget}</label>
+        </div>
+      )
+    }
+
+
+
+
+    //===================== Elements Stacking App ========================
+
+    const App = () => {
+
+      //============useState Pagination======
+      const [currentPage, setCurrentPage] = useState(1);
+      const [header, setHeader] = useState(pagesData[1].header)
+      const [subheader, setSubheader] = useState(pagesData[1].subheader)
+
+
+
+
+      //===============Pagination Function================
+      const [isNameValid, setIsNameValid] = useState(true);
+      const [isEmailValid, setIsEmailValid] = useState(true);
+      const [isPhoneValid, setIsPhoneValid] = useState(true);
+      const [isCompanyValid, setIsCompanyValid] = useState(true);
+
+      const handleNextStep = () => {
+        const isNameValid = name !== '';
+        const isEmailValid = email !== '' && email.endsWith('@gmail.com');
+        const isPhoneValid = phone !== '' && phone.startsWith('08') && /^\d{10,14}$/.test(phone.slice(2));
+        const isCompanyValid = company !== '';
+
+        setIsNameValid(isNameValid);
+        setIsEmailValid(isEmailValid);
+        setIsPhoneValid(isPhoneValid);
+        setIsCompanyValid(isCompanyValid);
+
+        if (isNameValid && isEmailValid && isPhoneValid && isCompanyValid) {
+          if (currentPage <= 4) {
+            setCurrentPage(currentPage + 1);
+            // Update header and subheader based on currentPage
+            const { header, subheader } = pagesData[currentPage + 1];
+            setHeader(header);
+            setSubheader(subheader);
+          }
+        }
+      };
+
+      const handlePreviousStep = () => {
+        if (currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+          // Update header and subheader based on currentPage
+          const { header, subheader } = pagesData[currentPage - 1];
+          setHeader(header);
+          setSubheader(subheader);
+        }
+      };
+
+
+      useEffect(() => {
+        // console.log(selectedService);
+        // console.log(selectedBudget);
+        window.localStorage.setItem('page', currentPage);
+        // window.localStorage.setItem('Service', selectedService);
+        // window.localStorage.setItem('Budget', selectedBudget);
+      }, [currentPage, isNameValid, isEmailValid, isPhoneValid, isCompanyValid]);
+
+
+
+      //==============useState Input Field======== 
+
+      const [name, setName] = useState('')
+      const [email, setEmail] = useState('')
+      const [phone, setPhone] = useState('')
+      const [company, setCompany] = useState('')
+
+      const handleNameChange = (event) => {
+        const typedName = event.target.value;
+        setName(typedName)
+        console.log(typedName)
+      };
+
+      const handleEmailChange = (event) => {
+        const typedEmail = event.target.value;
+        setEmail(typedEmail)
+        console.log(typedEmail)
+      };
+
+      const handlePhoneChange = (event) => {
+        const typedPhone = event.target.value;
+        setPhone(typedPhone)
+        console.log(typedPhone)
+      };
+
+      const handleCompanyChange = (event) => {
+        const typedCompany = event.target.value;
+        setCompany(typedCompany)
+        console.log(typedCompany)
+      };
+
+      useEffect(() => {
+        window.localStorage.setItem('name', name);
+        window.localStorage.setItem('email', email);
+        window.localStorage.setItem('phone', phone);
+        window.localStorage.setItem('company', company);
+      }, [name, email, phone, company]);
+
+
+      //=============Service Menu Selection================
+      const [selectedService, setSelectedService] = useState('');
+
+      const handleServiceSelect = (service) => {
+        setSelectedService(service);
+      };
+
+      const isServiceSelected = (service) => {
+        return selectedService === service;
+      };
+
+      useEffect(() => {
+        console.log(selectedService);
+        window.localStorage.setItem('Service', selectedService);
+      })
+
+      // ==========Budget Menu Selection====================
+      const [selectedBudget, setSelectedBudget] = useState('');
+
+      const handleBudgetSelect = (service) => {
+        setSelectedBudget(service);
+      };
+
+      const isBudgetSelected = (service) => {
+        return selectedBudget === service;
+      }
+
+      useEffect(() => {
+        console.log(selectedBudget);
+        window.localStorage.setItem('Budget', selectedBudget);
+      })
+
+      // ============ Handling Submit data ================
+      const [formData, setFormData] = useState(null);
+
+      const handleFormSubmit = () => {
+        const data = {
+          name,
+          email,
+          phone,
+          company,
+          selectedService,
+          selectedBudget,
+        };
+
+        setFormData(data);
+      };
+
+      useEffect(() => {
+        if (formData) {
+          localStorage.setItem('formData', JSON.stringify(formData));
+          alert(JSON.stringify(formData, null, 2));
+        }
+      }, [formData]);
+
+
+
+
+      return (
+        <>
+          <div className="container">
+            <div className="element-wrapper">
+              <div className='header'>{appHeader}</div>
+              <div className="subheader">{appSubheader}</div>
+              <div className="form-container">
+                <div className="step-marking">
+                  <PageNumber page='1' active={currentPage >= 1 ? 'circle-active' : 'circle-inactive'} />
+                  <ProgressBar percentage={currentPage === 1 ? 'half' : 'full'} />
+                  <PageNumber page='2' active={currentPage >= 2 ? 'circle-active' : 'circle-inactive'} />
+                  <ProgressBar percentage={currentPage === 2 ? 'half' : currentPage < 2 ? 'zero' : 'full'} />
+                  <PageNumber page='3' active={currentPage >= 3 ? 'circle-active' : 'circle-inactive'} />
+                  <ProgressBar percentage={currentPage === 3 ? 'half' : currentPage < 3 ? 'zero' : 'full'} />
+                  <PageNumber page='4' active={currentPage >= 4 ? 'circle-active' : 'circle-inactive'} />
+                </div>
+                <hr />
+                {currentPage == 4 && (
+                  <img className='submit-logo' src='images/submit.svg' alt='submit' />
+                )}
+                <div className={`form-header ${currentPage === 4 ? 'submit-page' : ''}`}>{header}</div>
+                <div className={`form-subheader ${currentPage === 4 ? 'submit-page' : ''}`}>{subheader}</div>
+                {currentPage === 4 && (
+                  <button className="submit-button" onClick={handleFormSubmit}>Submit</button>
+                )}
+                {currentPage === 1 && (
+                  <div className="input-container">
+                    <InputGroup
+                      title='Name'
+                      icon='user'
+                      handleChange={handleNameChange}
+                      value={name}
+                      isValid={isNameValid}
+                      errorMessage='Invalid name.'
+                    />
+                    <InputGroup
+                      title='Email'
+                      icon='mail'
+                      handleChange={handleEmailChange}
+                      value={email}
+                      isValid={isEmailValid}
+                      errorMessage='Invalid email format'
+                    />
+                    <InputGroup
+                      title='Phone Number'
+                      icon='mobile'
+                      handleChange={handlePhoneChange}
+                      value={phone}
+                      isValid={isPhoneValid}
+                      errorMessage='Invalid phone number.'
+                    />
+                    <InputGroup
+                      title='Company'
+                      icon='building'
+                      handleChange={handleCompanyChange}
+                      value={company}
+                      isValid={isCompanyValid}
+                      errorMessage='Invalid company.'
+                    />
+                  </div>
+                )}
+                {currentPage === 2 && (
+                  <div className="service-container">
+                    <ServiceMenu
+                      icon="development"
+                      service="Development"
+                      selected={isServiceSelected('Development')}
+                      handleClick={() => handleServiceSelect('Development')}
+                    />
+                    <ServiceMenu
+                      icon="webdesign"
+                      service="Web Design"
+                      selected={isServiceSelected('Web Design')}
+                      handleClick={() => handleServiceSelect('Web Design')}
+                    />
+                    <ServiceMenu
+                      icon="marketing"
+                      service="Marketing"
+                      selected={isServiceSelected('Marketing')}
+                      handleClick={() => handleServiceSelect('Marketing')}
+                    />
+                    <ServiceMenu
+                      icon="other"
+                      service="Other"
+                      selected={isServiceSelected('Other')}
+                      handleClick={() => handleServiceSelect('Other')}
+                    />
+                  </div>
+                )}
+                {currentPage === 3 && (
+                  <div className="budget-container">
+                    <BudgetMenu
+                      budget="$5.0000-$10.000"
+                      selected={isBudgetSelected('$5.0000-$10.000')}
+                      handleClick={() => handleBudgetSelect('$5.0000-$10.000')}
+                    />
+                    <BudgetMenu
+                      budget="$10.000-$20.000"
+                      selected={isBudgetSelected('$10.000-$20.000')}
+                      handleClick={() => handleBudgetSelect('$10.000-$20.000')}
+                    />
+                    <BudgetMenu
+                      budget="20.000-$50.000"
+                      selected={isBudgetSelected('20.000-$50.000')}
+                      handleClick={() => handleBudgetSelect('20.000-$50.000')}
+                    />
+                    <BudgetMenu
+                      budget="50.000+"
+                      selected={isBudgetSelected('50.000+')}
+                      handleClick={() => handleBudgetSelect('50.000+')}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className='page-navigation'>
+                {currentPage > 1 && (
+                  <button className="previous-step-button" onClick={handlePreviousStep}>Previous step</button>
+                )}
+                {currentPage < 4 && (
+                  <button className="next-step-button" onClick={handleNextStep}>Next step</button>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )
+    }
+
+    ReactDOM.render(<App />, rootElement);
+  </script>
+</body>
+
+</html>
