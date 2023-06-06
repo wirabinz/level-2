@@ -336,6 +336,8 @@ input.service-radio:checked + .custom-radio {
   animation: shake 0.5s linear;
 }
 
+
+
 @keyframes shake {
   0% {
     transform: translateX(0);

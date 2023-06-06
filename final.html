@@ -65,42 +65,18 @@
       const focusedClassName = isFocused ? 'focused' : '';
       const validityClassName = isValid === false ? 'invalid' : '';
 
-      //====== setup error animation =====//
-      const [isShaking, setIsShaking] = useState(false);
-
-      useEffect(() => {
-        if (isShaking) {
-          const inputChildren = document.getElementById('input-children');
-
-          inputChildren.classList.add('shake');
-
-          setTimeout(() => {
-            inputWrapper.classList.remove('shake');
-            setIsShaking(false);
-          }, 300);
-        }
-      }, [isShaking]);
-
-      const handleInputChange = (event) => {
-        handleChange(event);
-
-        // Add shaking animation when input becomes invalid
-        if (isValid === false) {
-          setIsShaking(true);
-        }
-      };
 
       return (
-        <div id="input-children" className="input-children">
+        <div className="input-children">
           <label className={`${focusedClassName} ${validityClassName} input-title `}>{title}</label>
-          <div  className={`input-wrapper ${focusedClassName} ${validityClassName}`}>
+          <div className={`input-wrapper ${focusedClassName} ${validityClassName}`}>
             <input
               type="text"
               className={`input-field ${validityClassName} `}
               placeholder={title}
               onFocus={handleFocused}
               onBlur={handleBlur}
-              onChange={handleInputChange}
+              onChange={handleChange}
             />
             <div className="input-icon">
               <img src={iconLink} alt={icon} />
@@ -209,6 +185,18 @@
           setTimeout(() => {
             nextButton.classList.remove('shake');
           }, 500);
+
+          // Form validation failed, add animation to the form input group
+          const inputWrappers = document.querySelectorAll('.invalid');
+
+          inputWrappers.forEach((inputWrapper) => {
+            inputWrapper.classList.add('shake');
+
+            setTimeout(() => {
+              inputWrapper.classList.remove('shake');
+            }, 300);
+          });
+
         }
       };
 
