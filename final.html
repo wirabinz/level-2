@@ -49,13 +49,13 @@
 
     // ========================= Input Form Module ========================== //
     function InputGroup({ title, icon, className = '', handleChange, value, isValid, isEmailValid, errorMessage }) {
-      const iconLink = icon ? `images/${icon}.svg` : ''
+      const iconLink = icon ? `images/${icon}.svg` : '';
 
       //=========Input field focus function==========
       const [isFocused, setIsFocused] = useState(false);
 
       const handleFocused = () => {
-        setIsFocused(true)
+        setIsFocused(true);
       };
 
       const handleBlur = () => {
@@ -65,29 +65,54 @@
       const focusedClassName = isFocused ? 'focused' : '';
       const validityClassName = isValid === false ? 'invalid' : '';
 
+      //====== setup error animation =====//
+      const [isShaking, setIsShaking] = useState(false);
+
+      useEffect(() => {
+        if (isShaking) {
+          const inputChildren = document.getElementById('input-children');
+
+          inputChildren.classList.add('shake');
+
+          setTimeout(() => {
+            inputWrapper.classList.remove('shake');
+            setIsShaking(false);
+          }, 300);
+        }
+      }, [isShaking]);
+
+      const handleInputChange = (event) => {
+        handleChange(event);
+
+        // Add shaking animation when input becomes invalid
+        if (isValid === false) {
+          setIsShaking(true);
+        }
+      };
+
       return (
-        <div className="input-children">
+        <div id="input-children" className="input-children">
           <label className={`${focusedClassName} ${validityClassName} input-title `}>{title}</label>
-          <div className={`input-wrapper ${focusedClassName} ${validityClassName}`}>
+          <div  className={`input-wrapper ${focusedClassName} ${validityClassName}`}>
             <input
               type="text"
               className={`input-field ${validityClassName} `}
               placeholder={title}
               onFocus={handleFocused}
               onBlur={handleBlur}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
-            <div className='input-icon'>
+            <div className="input-icon">
               <img src={iconLink} alt={icon} />
             </div>
-            {(isValid === false) && (
+            {isValid === false && (
               <div className="error-message">{errorMessage}</div>
             )}
-
           </div>
         </div>
-      )
+      );
     }
+
 
     //========================Service Menu Module ===============================//
     function ServiceMenu({ icon, service, className = '', selected, handleClick }) {
@@ -424,7 +449,7 @@
                   <button className="previous-step-button" onClick={handlePreviousStep}>Previous step</button>
                 )}
                 {currentPage < 4 && (
-                  <button  id="next-button" className="next-step-button" onClick={handleNextStep}>Next step</button>
+                  <button id="next-button" className="next-step-button" onClick={handleNextStep}>Next step</button>
                 )}
               </div>
             </div>
