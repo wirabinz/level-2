@@ -175,6 +175,15 @@
             setHeader(header);
             setSubheader(subheader);
           }
+        } else {
+          // Form validation failed, add shake animation to the button
+          const nextButton = document.getElementById('next-button');
+          nextButton.classList.add('shake');
+
+          // Remove the shake class after the animation completes
+          setTimeout(() => {
+            nextButton.classList.remove('shake');
+          }, 500);
         }
       };
 
@@ -415,7 +424,7 @@
                   <button className="previous-step-button" onClick={handlePreviousStep}>Previous step</button>
                 )}
                 {currentPage < 4 && (
-                  <button className="next-step-button" onClick={handleNextStep}>Next step</button>
+                  <button  id="next-button" className="next-step-button" onClick={handleNextStep}>Next step</button>
                 )}
               </div>
             </div>
