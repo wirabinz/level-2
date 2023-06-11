@@ -28,6 +28,7 @@
     const appSubheader =
       "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
 
+
     const PageNumber = ({ page, active }) => {
       const isActive = active === 'circle-active';
 
@@ -117,7 +118,6 @@
 
     //========================Budget Menu Module ===============================//
     function BudgetMenu({ budget, className = '', selected, handleClick }) {
-
       return (
         <div
           className={`budget-button ${className} ${selected ? 'selected' : ''}`}
@@ -148,9 +148,6 @@
       const [header, setHeader] = useState(pagesData[1].header)
       const [subheader, setSubheader] = useState(pagesData[1].subheader)
 
-
-
-
       //===============Pagination Function================
       const [isNameValid, setIsNameValid] = useState(true);
       const [isEmailValid, setIsEmailValid] = useState(true);
@@ -160,7 +157,7 @@
       const handleNextStep = () => {
         const isNameValid = name !== '';
         const isEmailValid = email !== '' && email.endsWith('@gmail.com');
-        const isPhoneValid = phone !== '' && phone.startsWith('08') && /^\d{10,14}$/.test(phone.slice(2));
+        const isPhoneValid = phone !== '' && phone.startsWith('08') && /^\d{8,12}$/.test(phone.slice(2));
         const isCompanyValid = company !== '';
 
         setIsNameValid(isNameValid);
@@ -222,7 +219,6 @@
 
 
       //==============useState Input Field======== 
-
       const [name, setName] = useState('')
       const [email, setEmail] = useState('')
       const [phone, setPhone] = useState('')
@@ -252,6 +248,7 @@
         console.log(typedCompany)
       };
 
+
       useEffect(() => {
         window.localStorage.setItem('name', name);
         window.localStorage.setItem('email', email);
@@ -265,6 +262,10 @@
 
       const handleServiceSelect = (service) => {
         setSelectedService(service);
+
+        if (currentPage === 1) {
+          setSelectedService('Development');
+        }
       };
 
       const isServiceSelected = (service) => {
@@ -272,9 +273,13 @@
       };
 
       useEffect(() => {
-        console.log(selectedService);
-        window.localStorage.setItem('Service', selectedService);
-      })
+        const storedService = window.localStorage.getItem('SelectedService');
+        if (storedService) {
+          setSelectedService(storedService);
+        } else {
+          setSelectedService('Development'); // Default selected service
+        }
+      }, []);
 
       // ==========Budget Menu Selection====================
       const [selectedBudget, setSelectedBudget] = useState('');
@@ -288,9 +293,14 @@
       }
 
       useEffect(() => {
-        console.log(selectedBudget);
-        window.localStorage.setItem('Budget', selectedBudget);
-      })
+        const storedBudget = window.localStorage.getItem('Budget');
+        if (storedBudget) {
+          setSelectedBudget(storedBudget);
+        } else {
+          setSelectedBudget('$50.000+'); // Default selected service
+        }
+      }, []);
+
 
       // ============ Handling Submit data ================
       const [formData, setFormData] = useState(null);
@@ -425,9 +435,9 @@
                       handleClick={() => handleBudgetSelect('20.000-$50.000')}
                     />
                     <BudgetMenu
-                      budget="50.000+"
-                      selected={isBudgetSelected('50.000+')}
-                      handleClick={() => handleBudgetSelect('50.000+')}
+                      budget="$50.000+"
+                      selected={isBudgetSelected('$50.000+')}
+                      handleClick={() => handleBudgetSelect('$50.000+')}
                     />
                   </div>
                 )}
