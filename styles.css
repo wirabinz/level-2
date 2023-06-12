@@ -90,7 +90,62 @@ body{
   background-color: #4A3AFF;
   border-radius: 40px;
   z-index: 1;
+  width: 0;
+  transition: width 0.5s ease;
 }
+
+
+/* .half-bar { */
+  /* animation: zeroToHalf 0.5s linear forwards; */
+/* } */
+/*  */
+/* @keyframes zeroToHalf { */
+  /* from { */
+    /* width: 0%; */
+  /* } */
+  /* to { */
+    /* width: 50%; */
+  /* } */
+/* } */
+/*  */
+/* .full-bar { */
+   /* animation: halfToFull 0.5s linear forwards; */
+/* } */
+/*  */
+/* @keyframes halfToFull { */
+  /* from { */
+    /* width: 50%; */
+  /* } */
+  /* to { */
+    /* width: 100%; */
+  /* } */
+/* } */
+/*  */
+/* .half-bar-reverse { */
+  /* animation: fullToHalf 0.5s linear forwards; */
+/* } */
+/*  */
+/* @keyframes fullToHalf { */
+  /* from { */
+    /* width: 100%; */
+  /* } */
+  /* to { */
+    /* width: 50%; */
+  /* } */
+/* } */
+/*  */
+/* .zero-bar { */
+  /* animation: halfToZero 0.5s linear forwards; */
+/* } */
+/*  */
+/* @keyframes halfToZero { */
+  /* from { */
+    /* width: 50%; */
+  /* } */
+  /* to { */
+    /* width: 0%; */
+  /* } */
+/* } */
 
 .zero-bar {
   flex-grow: 0;

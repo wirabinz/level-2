@@ -38,7 +38,7 @@
 
 
     const PageNumber = ({ page, active }) => {
-      const isActive = active === 'circle-active';
+      const isActive = active;
 
       return (
         <div className={`circle ${isActive ? 'circle-active' : 'circle-inactive'}`}>
@@ -48,7 +48,7 @@
     };
 
     function ProgressBar({ percentage, className = '', ...rest }) {
-      const progressLength = percentage ? `${percentage}-bar` : ''
+      const progressLength = percentage ? `${percentage}-bar` : '';
       return (
         <div className="line">
           <div className={`progress-bar ${progressLength}`} {...rest}></div>
@@ -153,7 +153,7 @@
 
       //============useState Pagination======
       const [currentPage, setCurrentPage] = useState(1);
-      const { header, subheader } = pagesData[currentPage-1];
+      const { header, subheader } = pagesData[currentPage - 1];
 
       //===============Pagination Function================
       const [isNameValid, setIsNameValid] = useState(true);
@@ -171,13 +171,13 @@
         setIsEmailValid(isEmailValid);
         setIsPhoneValid(isPhoneValid);
         setIsCompanyValid(isCompanyValid);
-        
+
 
         if (isNameValid && isEmailValid && isPhoneValid && isCompanyValid) {
           if (currentPage <= 4) {
             setCurrentPage(currentPage + 1);
             // Update header and subheader based on currentPage
-            const { header, subheader } = pagesData[currentPage ];
+            const { header, subheader } = pagesData[currentPage];
             // setHeader(header);
             // setSubheader(subheader);
           }
@@ -336,14 +336,16 @@
         };
 
         setFormData(data);
+        localStorage.setItem('formData', JSON.stringify(data));
+        alert(JSON.stringify(data, null, 2));
       };
 
-      useEffect(() => {
-        if (formData) {
-          localStorage.setItem('formData', JSON.stringify(formData));
-          alert(JSON.stringify(formData, null, 2));
-        }
-      }, [formData]);
+      // useEffect(() => {
+      //   if (formData) {
+      //     localStorage.setItem('formData', JSON.stringify(formData));
+      //     alert(JSON.stringify(formData, null, 2));
+      //   }
+      // }, [formData]);
 
 
 
@@ -356,13 +358,13 @@
               <div className="subheader">{appSubheader}</div>
               <div className="form-container">
                 <div className="step-marking">
-                  <PageNumber page='1' active={currentPage >= 1 ? 'circle-active' : 'circle-inactive'} />
+                  <PageNumber page="1" active={currentPage >= 1} />
                   <ProgressBar percentage={currentPage === 1 ? 'half' : 'full'} />
-                  <PageNumber page='2' active={currentPage >= 2 ? 'circle-active' : 'circle-inactive'} />
+                  <PageNumber page="2" active={currentPage >= 2} />
                   <ProgressBar percentage={currentPage === 2 ? 'half' : currentPage < 2 ? 'zero' : 'full'} />
-                  <PageNumber page='3' active={currentPage >= 3 ? 'circle-active' : 'circle-inactive'} />
+                  <PageNumber page="3" active={currentPage >= 3} />
                   <ProgressBar percentage={currentPage === 3 ? 'half' : currentPage < 3 ? 'zero' : 'full'} />
-                  <PageNumber page='4' active={currentPage >= 4 ? 'circle-active' : 'circle-inactive'} />
+                  <PageNumber page="4" active={currentPage >= 4} />
                 </div>
                 <hr />
                 {currentPage == 4 && (
