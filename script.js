@@ -1,4 +1,4 @@
-const pagesData = {
+const pagesDatax = {
     1: {
         id: 1,
         header: 'Contact details',
@@ -20,4 +20,29 @@ const pagesData = {
         subheader: 'Please review all the information you previously typed in the past step, and if all is okay, submit your message to receive a project quote in 24-48 hours.',
     },
 }
+
+const pagesData = [
+    {
+      id: 1,
+      header: 'Contact details',
+      subheader: 'Lorem ipsum dolor sit amet consectetur adipisc.',
+    },
+    {
+      id: 2,
+      header: 'Our services',
+      subheader: 'Please select which service you are interested in.',
+    },
+    {
+      id: 3,
+      header: 'What is your project budget?',
+      subheader: 'Please select the project budget you have in mind.',
+    },
+    {
+      id: 4,
+      header: 'Submit your quote request',
+      subheader:
+        'Please review all the information you previously typed in the past step, and if all is okay, submit your message to receive a project quote in 24-48 hours.',
+    },
+  ];
+  
 

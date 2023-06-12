@@ -21,6 +21,14 @@
   <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
   <script src="script.js"></script>
   <script type="text/babel">
+
+
+    // Clear local storage for the first 
+    // window.addEventListener('beforeunload', () => {
+    // localStorage.clear();
+    // });
+
+
     const { useState, useEffect } = React;
     const rootElement = document.getElementById("root");
 
@@ -145,8 +153,7 @@
 
       //============useState Pagination======
       const [currentPage, setCurrentPage] = useState(1);
-      const [header, setHeader] = useState(pagesData[1].header)
-      const [subheader, setSubheader] = useState(pagesData[1].subheader)
+      const { header, subheader } = pagesData[currentPage-1];
 
       //===============Pagination Function================
       const [isNameValid, setIsNameValid] = useState(true);
@@ -164,14 +171,15 @@
         setIsEmailValid(isEmailValid);
         setIsPhoneValid(isPhoneValid);
         setIsCompanyValid(isCompanyValid);
+        
 
         if (isNameValid && isEmailValid && isPhoneValid && isCompanyValid) {
           if (currentPage <= 4) {
             setCurrentPage(currentPage + 1);
             // Update header and subheader based on currentPage
-            const { header, subheader } = pagesData[currentPage + 1];
-            setHeader(header);
-            setSubheader(subheader);
+            const { header, subheader } = pagesData[currentPage ];
+            // setHeader(header);
+            // setSubheader(subheader);
           }
         } else {
           // Form validation failed, add shake animation to the button
@@ -202,8 +210,8 @@
           setCurrentPage(currentPage - 1);
           // Update header and subheader based on currentPage
           const { header, subheader } = pagesData[currentPage - 1];
-          setHeader(header);
-          setSubheader(subheader);
+          // setHeader(header);
+          // setSubheader(subheader);
         }
       };
 
@@ -231,7 +239,7 @@
 
 
       //==============useState Input Field======== 
-      const [name, setName] = useState(localStorage.getItem('name') ||'');
+      const [name, setName] = useState(localStorage.getItem('name') || '');
       const [email, setEmail] = useState(localStorage.getItem('email') || '');
       const [phone, setPhone] = useState(localStorage.getItem('phone') || '');
       const [company, setCompany] = useState(localStorage.getItem('company') || '');
