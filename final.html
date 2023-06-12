@@ -24,9 +24,9 @@
 
 
     // Clear local storage for the first 
-    // window.addEventListener('beforeunload', () => {
-    // localStorage.clear();
-    // });
+    window.addEventListener('beforeunload', () => {
+    localStorage.clear();
+    });
 
 
     const { useState, useEffect } = React;
