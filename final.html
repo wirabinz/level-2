@@ -74,7 +74,7 @@
             <input
               type="text"
               className={`input-field ${validityClassName} `}
-              placeholder={title}
+              placeholder={value || title}
               onFocus={handleFocused}
               onBlur={handleBlur}
               onChange={handleChange}
@@ -216,13 +216,25 @@
         // window.localStorage.setItem('Budget', selectedBudget);
       }, [currentPage, isNameValid, isEmailValid, isPhoneValid, isCompanyValid]);
 
+      useEffect(() => {
+        // Retrieve input values from local storage when the component mounts
+        const storedName = window.localStorage.getItem('name');
+        const storedEmail = window.localStorage.getItem('email');
+        const storedPhone = window.localStorage.getItem('phone');
+        const storedCompany = window.localStorage.getItem('company');
+
+        setName(storedName || '');
+        setEmail(storedEmail || '');
+        setPhone(storedPhone || '');
+        setCompany(storedCompany || '');
+      }, []);
 
 
       //==============useState Input Field======== 
-      const [name, setName] = useState('')
-      const [email, setEmail] = useState('')
-      const [phone, setPhone] = useState('')
-      const [company, setCompany] = useState('')
+      const [name, setName] = useState(localStorage.getItem('name') ||'');
+      const [email, setEmail] = useState(localStorage.getItem('email') || '');
+      const [phone, setPhone] = useState(localStorage.getItem('phone') || '');
+      const [company, setCompany] = useState(localStorage.getItem('company') || '');
 
       const handleNameChange = (event) => {
         const typedName = event.target.value;
