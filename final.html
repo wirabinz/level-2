@@ -57,7 +57,7 @@
     }
 
     // ========================= Input Form Module ========================== //
-    function InputGroup({ title, icon, className = '', handleChange, value, isValid, isEmailValid, errorMessage }) {
+    function InputGroup({ title, icon, className = '', handleChange, value, isValid,  errorMessage }) {
       const iconLink = icon ? `images/${icon}.svg` : '';
 
       //=========Input field focus function==========
@@ -82,7 +82,7 @@
             <input
               type="text"
               className={`input-field ${validityClassName} `}
-              placeholder={value || title}
+              placeholder={title}
               onFocus={handleFocused}
               onBlur={handleBlur}
               onChange={handleChange}
@@ -224,18 +224,18 @@
         // window.localStorage.setItem('Budget', selectedBudget);
       }, [currentPage, isNameValid, isEmailValid, isPhoneValid, isCompanyValid]);
 
-      useEffect(() => {
-        // Retrieve input values from local storage when the component mounts
-        const storedName = window.localStorage.getItem('name');
-        const storedEmail = window.localStorage.getItem('email');
-        const storedPhone = window.localStorage.getItem('phone');
-        const storedCompany = window.localStorage.getItem('company');
+      // useEffect(() => {
+      //   // Retrieve input values from local storage when the component mounts
+      //   const storedName = window.localStorage.getItem('name');
+      //   const storedEmail = window.localStorage.getItem('email');
+      //   const storedPhone = window.localStorage.getItem('phone');
+      //   const storedCompany = window.localStorage.getItem('company');
 
-        setName(storedName || '');
-        setEmail(storedEmail || '');
-        setPhone(storedPhone || '');
-        setCompany(storedCompany || '');
-      }, []);
+      //   setName(storedName || '');
+      //   setEmail(storedEmail || '');
+      //   setPhone(storedPhone || '');
+      //   setCompany(storedCompany || '');
+      // }, []);
 
 
       //==============useState Input Field======== 
