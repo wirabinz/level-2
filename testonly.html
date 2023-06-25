@@ -24,311 +24,263 @@
     const { useState, useEffect } = React;
     const rootElement = document.getElementById("root");
 
-    const appHeader = "Get a project quote";
-    const appSubheader =
-      "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
 
-    const PageNumber = ({ page, active }) => {
-      const isActive = active === 'circle-active';
+
+    function App() {
+
+      const [step, setStep] = useState(0);
+      const [formValues, setFormValues] = useState({}); // Store the input values here
+
+      function handleNextStep() {
+        if (step < 3) {
+          // Check form validity before proceeding
+          const currentPageForm = inputFormData.filter((input) => input.page === step + 1);
+
+          for (const input of currentPageForm) {
+            const inputValue = formValues[input.title];
+
+            if (input.title === 'Email') {
+              isValid = inputValue && inputValue.endsWith('@gmail.com');
+            } else if (input.title === 'Phone Number') {
+              isValid = inputValue && inputValue.startsWith('08') && /^\d{8,12}$/.test(inputValue.slice(2));
+            } else {
+              isValid = inputValue && inputValue.trim() !== '';
+            }
+
+            input.isValid = isValid;
+            
+
+            if (!isValid) {
+              // If any input is invalid, stop the loop and prevent proceeding
+              setStep((s) => s + 0);
+            }
+          }
+
+          // If all inputs are valid, proceed to the next step
+          setStep((s) => s + 1);
+
+        }
+      }
+
+
+
+      function handlePreviousStep() {
+        if (step >= 1) setStep((s) => s - 1);
+      }
+
+      function handleInputChange(inputName, value) {
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          [inputName]: value,
+        }));
+      }
 
       return (
-        <div className={`circle ${isActive ? 'circle-active' : 'circle-inactive'}`}>
-          <span className={`number ${isActive ? 'active' : ''}`}>{page}</span>
+        <div className='container'>
+          <div className="element-wrapper">
+            <WebHeader />
+            <div className='form-container'>
+              <StepProgress page={step} />
+              <PageTitles page={step} />
+              <FormPages page={step} handleInputChange={handleInputChange} formValues={formValues} />
+            </div>
+            <div className='page-navigation'>
+              {step > 0 && (<button className="previous-step-button" onClick={handlePreviousStep}>Previous step</button>)}
+              {step < 3 && (<button className="next-step-button" onClick={handleNextStep}>Next step</button>)}
+            </div>
+          </div>
         </div>
-      );
-    };
-
-    function ProgressBar({ percentage, className = '', ...rest }) {
-      const progressLength = percentage ? `${percentage}-bar` : ''
-      return (
-        <div className="line">
-          <div className={`progress-bar ${progressLength}`} {...rest}></div>
-        </div>
-      );
+      )
     }
 
-    function InputGroup({ title, icon, value, setValue, name, email, phone, company, className = '', ...rest }) {
-      const iconLink = icon ? `images/${icon}.svg` : ''
+    function WebHeader() {
+      const appHeader = "Get a project quote";
+      const appSubheader =
+        "Please fill the form below to receive a quote for your project. Feel free to add as much detail as needed.";
 
-      //=========Input field focus function==========
+      return (
+        <>
+          <div className='header'>{appHeader}</div>
+          <div className="subheader">{appSubheader}</div>
+        </>
+      )
+    };
+
+    function PageTitles({ page }) {
+
+      return (
+        <>
+          <div className={`form-header ${page + 1 === 4 ? 'submit-page' : ''}`}>{pagesData[page].header}</div>
+          <div className={`form-subheader ${page + 1 === 4 ? 'submit-page' : ''}`}>{pagesData[page].subheader}</div>
+        </>
+      )
+    };
+
+    function StepProgress({ page }) {
+      return (
+        <>
+          <div className="step-marking">
+            <PageId number={1} step={page} />
+            <ProgressBar percentage={(page + 1) === 1 ? 'half' : 'full'} />
+            <PageId number={2} step={page} />
+            <ProgressBar percentage={(page + 1) === 2 ? 'half' : (page + 1) < 2 ? 'zero' : 'full'} />
+            <PageId number={3} step={page} />
+            <ProgressBar percentage={(page + 1) === 3 ? 'half' : (page + 1) < 3 ? 'zero' : 'full'} />
+            <PageId number={4} step={page} />
+          </div>
+          <hr />
+          {(page + 1) === 4 && (
+            <img className='submit-logo' src='images/submit.svg' alt='submit' />
+          )}
+        </>
+      )
+    };
+
+    function PageId({ number, step }) {
+      return (
+        <div className={`circle ${(step + 1) < number ? 'circle-inactive' : 'circle-active'}`}>
+          {number}
+        </div>
+      )
+    };
+
+    function ProgressBar({ percentage }) {
+      const progressLength = percentage ? `${percentage}-bar` : '';
+      return (
+        <div className="line">
+          <div className={`progress-bar ${progressLength}`} ></div>
+        </div>
+      )
+    };
+
+    function FormPages({ page, handleInputChange, formValues }) {
+      return (
+        <>
+          {(page + 1) === 1 && (
+            <div className="input-container">
+              {inputFormData.map((input) => (
+                <InputForm
+                  formObj={input}
+                  key={input.title}
+                  handleInputChange={handleInputChange}
+                  formValues={formValues}
+                />
+              ))}
+            </div>
+          )}
+          {(page + 1) === 2 && (
+            <div className="service-container">
+              {serviceFormData.map((input) => (
+                <ServiceMenu formObj={input} key={input.title} />
+              ))}
+            </div>
+          )}
+          {(page + 1) === 3 && (
+            <div className="budget-container">
+              {budgetFormData.map((input) => (
+                <BudgetMenu formObj={input} key={input.budget} />
+              ))}
+            </div>
+          )}
+        </>
+      )
+    };
+
+    function InputForm({ formObj, handleInputChange, formValues }) {
+      const iconLink = formObj ? `images/${formObj.icon}.svg` : '';
+      const inputValue = formValues[formObj.title] || '';
+
       const [isFocused, setIsFocused] = useState(false);
-
-      const [isNameValid, setIsNameValid] = useState(true);
-      const [isEmailValid, setIsEmailValid] = useState(true);
-      const [isPhoneValid, setIsPhoneValid] = useState(true);
-      const [isCompanyValid, setIsCompanyValid] = useState(true);
+      const [isValid, setIsValid] = useState(true); // Add a state to track validity
 
       const handleFocused = () => {
-        setIsFocused(true)
+        setIsFocused(true);
       };
 
       const handleBlur = () => {
         setIsFocused(false);
-
-        if (value && value === email) {
-          if (!value.endsWith('@gmail.com')) {
-            setIsEmailValid(false);
-          } else {
-            setIsEmailValid(true);
-          }
-        }
-
-        if (value && value === phone) {
-          const phoneNumber = value.slice(2); // Remove the first two digits
-          if (value.startsWith('08') && /^\d{8,12}$/.test(phoneNumber) && phoneNumber.length >= 10 && phoneNumber.length <= 14) {
-            setIsPhoneValid(true);
-          } else {
-            setIsPhoneValid(false);
-          }
-        }
       };
 
-      const focusedClassName = `${isFocused ? 'focused' : ''}`;
+      const handleInput = (e) => {
+        const value = e.target.value;
+        handleInputChange(formObj.title, value);
+      };
+
+      const focusedClassName = isFocused ? 'focused' : '';
+      const validityClassName = formObj.isValid === false ? 'invalid' : '';
+
+      useEffect(() => {
+        // Check validity when input value changes
+        const validateInput = () => {
+          let inputIsValid = true;
+
+          if (formObj.validation === 'email') {
+            inputIsValid = inputValue.endsWith('@gmail.com');
+          } else if (formObj.validation === 'phone') {
+            inputIsValid = inputValue.startsWith('08') && /^\d{8,12}$/.test(inputValue.slice(2));
+          } else {
+            inputIsValid = inputValue.trim() !== '';
+          }
+
+          setIsValid(inputIsValid);
+        };
+
+        validateInput();
+      }, [formObj.validation, inputValue]);
 
       return (
         <div className="input-children">
-          <label className={`${focusedClassName} input-title ${!isEmailValid || !isPhoneValid ? 'invalid' : ''}`}>{title}</label>
-          <div className={`input-wrapper ${focusedClassName} `}>
+          <label className={`${focusedClassName} ${validityClassName}  input-title `}>{formObj.title}</label>
+          <div className={`input-wrapper ${focusedClassName} ${validityClassName} `}>
             <input
               type="text"
-              className={`input-field ${(!isEmailValid || !isPhoneValid || !isNameValid || !isCompanyValid) ? 'invalid' : ''}`}
-              placeholder={title}
+              className={`input-field ${validityClassName}`}
+              placeholder={formObj.title}
+              value={inputValue} // Set the value from the component state
+              onChange={handleInput} // Handle input change event
               onFocus={handleFocused}
               onBlur={handleBlur}
-              value={value}
-
-              onChange={(event) => setValue(event.target.value)}
             />
-            <div className='input-icon'>
-              <img src={iconLink} alt={icon} />
+            <div className="input-icon">
+              <img src={iconLink} alt={formObj.icon} />
             </div>
-            {!isEmailValid && value === email && (
-              <div className="error-message">Invalid email format.</div>
-            )}
-            {!isPhoneValid && value === phone && (
-              <div className="error-message">Invalid phone number.</div>
+            {!formObj.isValid && (
+              <div className="error-message">{formObj.errormessage}</div>
             )}
           </div>
-        </div>
-      )
-    }
-
-
-    function ServiceMenu({ icon, service, className = '', selected, handleClick }) {
-      const iconLink = icon ? `images/${icon}.svg` : '';
-
-      return (
-        <div
-          className={`service-button ${className} ${selected ? 'selected' : ''}`}
-          onClick={handleClick}
-        >
-          <input
-            type="radio"
-            name="service"
-            className="service-radio"
-            checked={selected}
-            onChange={() => { }}
-            style={{ display: 'none' }}
-          />
-          <div className="service-icon-base">
-            <img src={iconLink} alt={icon} />
-          </div>
-          <div className="service">{service}</div>
         </div>
       );
     }
 
-    function BudgetMenu({ budget, className = '', selected, handleClick }) {
-
+    function ServiceMenu({ formObj }) {
+      const iconLink = formObj ? `images/${formObj.icon}.svg` : '';
       return (
-        <div
-          className={`budget-button ${className} ${selected ? 'selected' : ''}`}
-          onClick={handleClick}
-        >
+        <div className='service-button'>
           <input
-            type="radio"
-            name="service"
-            className="service-radio custom-radio"
-            checked={selected}
-            onChange={() => { }}
-
+            type='radio'
+            name='service'
+            className='service-radio'
+            style={{ display: 'none' }}
           />
-          <label className="budget-option">{budget}</label>
+          <div className="service-icon-base">
+            <img src={iconLink} alt={formObj.icon} />
+          </div>
+          <div className="service">{formObj.title}</div>
         </div>
       )
     }
 
-    const useInputState = (initialValue = '') => {
-      const [value, setValue] = useState(initialValue);
-      return [value, setValue];
-    };
-
-
-    //===================== Elements Stacking App ========================
-
-    const App = () => {
-
-      //============useState Pagination======
-      const [currentPage, setCurrentPage] = useState(1);
-      const [header, setHeader] = useState(pagesData[1].header)
-      const [subheader, setSubheader] = useState(pagesData[1].subheader)
-
-      //===============Pagination Function================
-      const handleNextStep = () => {
-
-
-
-        if (currentPage <= 4) {
-          setCurrentPage(currentPage + 1);
-          // Update header and subheader based on currentPage
-          const { header, subheader } = pagesData[currentPage + 1];
-          setHeader(header);
-          setSubheader(subheader);
-        }
-      };
-
-      const handlePreviousStep = () => {
-        if (currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-          // Update header and subheader based on currentPage
-          const { header, subheader } = pagesData[currentPage - 1];
-          setHeader(header);
-          setSubheader(subheader);
-        }
-      };
-
-      useEffect(() => {
-        console.log(selectedService);
-        console.log(selectedBudget);
-        window.localStorage.setItem('page', currentPage);
-        window.localStorage.setItem('Service', selectedService);
-        window.localStorage.setItem('Budget', selectedBudget);
-        window.localStorage.setItem('name', name);
-      }, [currentPage]);
-
-
-
-      //==============useState Input Field======== 
-      const [name, setName] = useInputState('');
-      const [email, setEmail] = useInputState('');
-      const [phone, setPhone] = useInputState('');
-      const [company, setCompany] = useInputState('');
-
-
-      //=============Service Menu Selection================
-      const [selectedService, setSelectedService] = useState('');
-
-      const handleServiceSelect = (service) => {
-        setSelectedService(service);
-      };
-
-      const isServiceSelected = (service) => {
-        return selectedService === service;
-      };
-
-      //============Budget Menu Selection===================
-
-      const [selectedBudget, setSelectedBudget] = useState('');
-
-      const handleBudgetSelect = (service) => {
-        setSelectedBudget(service);
-      };
-
-      const isBudgetSelected = (service) => {
-        return selectedBudget === service;
-      }
-
+    function BudgetMenu({ formObj }) {
       return (
-        <>
-          <div className="container">
-            <div className="element-wrapper">
-              <div className='header'>{appHeader}</div>
-              <div className="subheader">{appSubheader}</div>
-              <div className="form-container">
-                <div className="step-marking">
-                  <PageNumber page='1' active={currentPage >= 1 ? 'circle-active' : 'circle-inactive'} />
-                  <ProgressBar percentage={currentPage === 1 ? 'half' : 'full'} />
-                  <PageNumber page='2' active={currentPage >= 2 ? 'circle-active' : 'circle-inactive'} />
-                  <ProgressBar percentage={currentPage === 2 ? 'half' : currentPage < 2 ? 'zero' : 'full'} />
-                  <PageNumber page='3' active={currentPage >= 3 ? 'circle-active' : 'circle-inactive'} />
-                  <ProgressBar percentage={currentPage === 3 ? 'half' : currentPage < 3 ? 'zero' : 'full'} />
-                  <PageNumber page='4' active={currentPage >= 4 ? 'circle-active' : 'circle-inactive'} />
-                </div>
-                <hr />
-                <div className='form-header'>{header}</div>
-                <div className='form-subheader'>{subheader}</div>
-                {currentPage === 1 && (
-                  <div className="input-container">
-                    <InputGroup title='Name' icon='user' value={name} setValue={setName} />
-                    <InputGroup title='Email' icon='mail' value={email} setValue={setEmail} email={email} />
-                    <InputGroup title='Phone Number' icon='mobile' value={phone} setValue={setPhone} phone={phone} />
-                    <InputGroup title='Company' icon='building' value={company} setValue={setCompany} />
-                  </div>
-                )}
-                {currentPage === 2 && (
-                  <div className="service-container">
-                    <ServiceMenu
-                      icon="development"
-                      service="Development"
-                      selected={isServiceSelected('Development')}
-                      handleClick={() => handleServiceSelect('Development')}
-                    />
-                    <ServiceMenu
-                      icon="webdesign"
-                      service="Web Design"
-                      selected={isServiceSelected('Web Design')}
-                      handleClick={() => handleServiceSelect('Web Design')}
-                    />
-                    <ServiceMenu
-                      icon="marketing"
-                      service="Marketing"
-                      selected={isServiceSelected('Marketing')}
-                      handleClick={() => handleServiceSelect('Marketing')}
-                    />
-                    <ServiceMenu
-                      icon="other"
-                      service="Other"
-                      selected={isServiceSelected('Other')}
-                      handleClick={() => handleServiceSelect('Other')}
-                    />
-                  </div>
-                )}
-                {currentPage === 3 && (
-                  <div className="budget-container">
-                    <BudgetMenu
-                      budget="$5.0000-$10.000"
-                      selected={isBudgetSelected('$5.0000-$10.000')}
-                      handleClick={() => handleBudgetSelect('$5.0000-$10.000')}
-                    />
-                    <BudgetMenu
-                      budget="$10.000-$20.000"
-                      selected={isBudgetSelected('$10.000-$20.000')}
-                      handleClick={() => handleBudgetSelect('$10.000-$20.000')}
-                    />
-                    <BudgetMenu
-                      budget="20.000-$50.000"
-                      selected={isBudgetSelected('20.000-$50.000')}
-                      handleClick={() => handleBudgetSelect('20.000-$50.000')}
-                    />
-                    <BudgetMenu
-                      budget="50.000+"
-                      selected={isBudgetSelected('50.000+')}
-                      handleClick={() => handleBudgetSelect('50.000+')}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className='page-navigation'>
-                {currentPage > 1 && (
-                  <button className="previous-step-button" onClick={handlePreviousStep}>Previous step</button>
-                )}
-                {currentPage < 4 && (
-                  <button className="next-step-button" onClick={handleNextStep}>Next step</button>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
+        <div className='budget-button'>
+          <input
+            type="radio"
+            name="budget"
+            className="service-radio custom-radio"
+          />
+          <label className="budget-option">{formObj.budget}</label>
+
+        </div>
       )
     }
 
