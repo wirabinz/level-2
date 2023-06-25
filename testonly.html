@@ -36,6 +36,7 @@
           // Check form validity before proceeding
           const currentPageForm = inputFormData.filter((input) => input.page === step + 1);
 
+
           for (const input of currentPageForm) {
             const inputValue = formValues[input.title];
 
@@ -48,11 +49,10 @@
             }
 
             input.isValid = isValid;
-            
 
-            if (!isValid) {
-              // If any input is invalid, stop the loop and prevent proceeding
-              setStep((s) => s + 0);
+
+            if (currentPageForm.some(input => !input.isValid)) {
+              return;
             }
           }
 
