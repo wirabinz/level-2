@@ -31,44 +31,25 @@
       const [step, setStep] = useState(0);
       const [formValues, setFormValues] = useState({}); // Store the input values here
 
-      function handleNextStep() {
+      const handleNextStep = () => {
+        const isNameValid = formValues['Name'] !== '';
+        const isEmailValid = formValues['Email'] !== '' && formValues['Email'].endsWith('@gmail.com');
+        const isPhoneValid = formValues['Phone Number'] !== '' && formValues['Phone Number'].startsWith('08') && /^\d{8,12}$/.test(phone.slice(2));
+        const isCompanyValid = formValues['Company'] !== '';
+
         if (step < 3) {
-          // Check form validity before proceeding
-          const currentPageForm = inputFormData.filter((input) => input.page === step + 1);
-
-
-          for (const input of currentPageForm) {
-            const inputValue = formValues[input.title];
-
-            if (input.title === 'Email') {
-              isValid = inputValue && inputValue.endsWith('@gmail.com');
-            } else if (input.title === 'Phone Number') {
-              isValid = inputValue && inputValue.startsWith('08') && /^\d{8,12}$/.test(inputValue.slice(2));
-            } else {
-              isValid = inputValue && inputValue.trim() !== '';
-            }
-
-            input.isValid = isValid;
-
-
-            if (currentPageForm.some(input => !input.isValid)) {
-              return;
-            }
-          }
-
-          // If all inputs are valid, proceed to the next step
           setStep((s) => s + 1);
-
-        }
-      }
-
-
+          console.log(isNameValid);
+          console.log(formValues)
+        };
+      };
 
       function handlePreviousStep() {
         if (step >= 1) setStep((s) => s - 1);
-      }
+      };
 
       function handleInputChange(inputName, value) {
+        console.log(`User typed "${value}" in ${inputName}`);
         setFormValues((prevValues) => ({
           ...prevValues,
           [inputName]: value,
@@ -209,24 +190,7 @@
       const focusedClassName = isFocused ? 'focused' : '';
       const validityClassName = formObj.isValid === false ? 'invalid' : '';
 
-      useEffect(() => {
-        // Check validity when input value changes
-        const validateInput = () => {
-          let inputIsValid = true;
 
-          if (formObj.validation === 'email') {
-            inputIsValid = inputValue.endsWith('@gmail.com');
-          } else if (formObj.validation === 'phone') {
-            inputIsValid = inputValue.startsWith('08') && /^\d{8,12}$/.test(inputValue.slice(2));
-          } else {
-            inputIsValid = inputValue.trim() !== '';
-          }
-
-          setIsValid(inputIsValid);
-        };
-
-        validateInput();
-      }, [formObj.validation, inputValue]);
 
       return (
         <div className="input-children">
