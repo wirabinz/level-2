@@ -29,19 +29,36 @@
     function App() {
 
       const [step, setStep] = useState(0);
-      const [formValues, setFormValues] = useState({}); // Store the input values here
+
+      const initialFormValues = {
+        'Name': '',
+        'Email': '',
+        'Phone Number': '',
+        'Company': '',
+      }
+      const [formValues, setFormValues] = useState(initialFormValues); // Store the input values here
 
       const handleNextStep = () => {
         const isNameValid = formValues['Name'] !== '';
         const isEmailValid = formValues['Email'] !== '' && formValues['Email'].endsWith('@gmail.com');
-        const isPhoneValid = formValues['Phone Number'] !== '' && formValues['Phone Number'].startsWith('08') && /^\d{8,12}$/.test(phone.slice(2));
+        const isPhoneValid = formValues['Phone Number'] !== '' && formValues['Phone Number'].startsWith('08') && /^\d{8,12}$/.test(formValues['Phone Number'].slice(2));
         const isCompanyValid = formValues['Company'] !== '';
 
-        if (step < 3) {
-          setStep((s) => s + 1);
-          console.log(isNameValid);
-          console.log(formValues)
-        };
+        const updatedInputFormData=[...inputFormData];
+        updatedInputFormData[0].isValid=isNameValid
+        updatedInputFormData[1].isValid=isEmailValid
+        updatedInputFormData[2].isValid=isPhoneValid
+        updatedInputFormData[3].isValid=isCompanyValid
+
+        if (isNameValid && isEmailValid && isPhoneValid && isCompanyValid) {
+          if (step < 3) {
+            setStep((s) => s + 1);
+            console.log(formValues)
+          } else {
+            
+
+          }
+        }
       };
 
       function handlePreviousStep() {
@@ -173,7 +190,7 @@
 
       const [isFocused, setIsFocused] = useState(false);
       const [isValid, setIsValid] = useState(true); // Add a state to track validity
-
+      
       const handleFocused = () => {
         setIsFocused(true);
       };
@@ -185,17 +202,20 @@
       const handleInput = (e) => {
         const value = e.target.value;
         handleInputChange(formObj.title, value);
+        handleValidity();
       };
 
+      const handleValidity = () => {
+        setIsValid(formObj.isValid);
+      }
+
       const focusedClassName = isFocused ? 'focused' : '';
-      const validityClassName = formObj.isValid === false ? 'invalid' : '';
-
-
+      const validityClassName = isValid ? 'invalid' : '';
 
       return (
         <div className="input-children">
-          <label className={`${focusedClassName} ${validityClassName}  input-title `}>{formObj.title}</label>
-          <div className={`input-wrapper ${focusedClassName} ${validityClassName} `}>
+          <label className={`input-title ${validityClassName} ${focusedClassName}  `}>{formObj.title}</label>
+          <div className={`input-wrapper ${validityClassName} ${focusedClassName}  `}>
             <input
               type="text"
               className={`input-field ${validityClassName}`}

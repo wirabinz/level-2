@@ -70,7 +70,12 @@
       const handleBlur = () => {
         setIsFocused(false);
       };
-      
+
+      const handleInput = (e) => {
+        const value = e.target.value;
+        handleChange(value)
+      }
+
       const focusedClassName = isFocused ? 'focused' : '';
       const validityClassName = isValid === false ? 'invalid' : '';
 
@@ -174,7 +179,7 @@
 
 
         if (isNameValid && isEmailValid && isPhoneValid && isCompanyValid) {
-      
+
 
           if (currentPage <= 4) {
             setCurrentPage(currentPage + 1);
@@ -241,10 +246,10 @@
 
 
       //==============useState Input Field======== 
-      const [name, setName] = useState(localStorage.getItem('name') || '');
-      const [email, setEmail] = useState(localStorage.getItem('email') || '');
-      const [phone, setPhone] = useState(localStorage.getItem('phone') || '');
-      const [company, setCompany] = useState(localStorage.getItem('company') || '');
+      const [name, setName] = useState('');
+      const [email, setEmail] = useState('');
+      const [phone, setPhone] = useState('');
+      const [company, setCompany] = useState('');
 
       const handleNameChange = (event) => {
         const typedName = event.target.value;
@@ -270,6 +275,30 @@
         console.log(typedCompany)
       };
 
+      // function handleNameChange(value){
+      //   setName((prevValues) => ({
+      //     ...prevValues,
+      //     value,
+      //   }));
+      // }
+      // function handleEmailChange(value){
+      //   setEmail((prevValues) => ({
+      //     ...prevValues,
+      //     value,
+      //   }));
+      // }
+      // function handlePhoneChange(value){
+      //   setPhone((prevValues) => ({
+      //     ...prevValues,
+      //     value,
+      //   }));
+      // }
+      // function handleCompanyChange(value){
+      //   setCompany((prevValues) => ({
+      //     ...prevValues,
+      //     value,
+      //   }));
+      // }
 
       // useEffect(() => {
       //   window.localStorage.setItem('name', name);
@@ -277,6 +306,19 @@
       //   window.localStorage.setItem('phone', phone);
       //   window.localStorage.setItem('company', company);
       // }, [name, email, phone, company]);
+
+      // useEffect(() => {
+      //   // Retrieve input values from localStorage when the component mounts
+      //   const storedName = localStorage.getItem('name') || '';
+      //   const storedEmail = localStorage.getItem('email') || '';
+      //   const storedPhone = localStorage.getItem('phone') || '';
+      //   const storedCompany = localStorage.getItem('company') || '';
+
+      //   setName(storedName);
+      //   setEmail(storedEmail);
+      //   setPhone(storedPhone);
+      //   setCompany(storedCompany);
+      // }, []);
 
 
       //=============Service Menu Selection================
