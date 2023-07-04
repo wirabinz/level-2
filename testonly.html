@@ -44,11 +44,6 @@
         const isPhoneValid = formValues['Phone Number'] !== '' && formValues['Phone Number'].startsWith('08') && /^\d{8,12}$/.test(formValues['Phone Number'].slice(2));
         const isCompanyValid = formValues['Company'] !== '';
 
-        const updatedInputFormData=[...inputFormData];
-        updatedInputFormData[0].isValid=isNameValid
-        updatedInputFormData[1].isValid=isEmailValid
-        updatedInputFormData[2].isValid=isPhoneValid
-        updatedInputFormData[3].isValid=isCompanyValid
 
         if (isNameValid && isEmailValid && isPhoneValid && isCompanyValid) {
           if (step < 3) {
@@ -202,15 +197,10 @@
       const handleInput = (e) => {
         const value = e.target.value;
         handleInputChange(formObj.title, value);
-        handleValidity();
       };
 
-      const handleValidity = () => {
-        setIsValid(formObj.isValid);
-      }
-
       const focusedClassName = isFocused ? 'focused' : '';
-      const validityClassName = isValid ? 'invalid' : '';
+      const validityClassName = isValid ? '' : 'invalid';
 
       return (
         <div className="input-children">
