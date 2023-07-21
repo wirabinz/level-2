@@ -36,7 +36,9 @@
         'Phone Number': '',
         'Company': '',
       }
+
       const [formValues, setFormValues] = useState(initialFormValues); // Store the input values here
+      const [isFormValid,setIsFormValid] = useState(true);
 
       const handleNextStep = () => {
         const isNameValid = formValues['Name'] !== '';
@@ -50,8 +52,7 @@
             setStep((s) => s + 1);
             console.log(formValues)
           } else {
-            
-
+            setIsFormValid(false);
           }
         }
       };
@@ -157,6 +158,7 @@
                   key={input.title}
                   handleInputChange={handleInputChange}
                   formValues={formValues}
+                  
                 />
               ))}
             </div>
@@ -183,7 +185,6 @@
       const iconLink = formObj ? `images/${formObj.icon}.svg` : '';
       const inputValue = formValues[formObj.title] || '';
       
-
       const [isFocused, setIsFocused] = useState(false);
       const [isValid, setIsValid] = useState(true); // Add a state to track validity
       
