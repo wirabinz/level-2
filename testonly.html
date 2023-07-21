@@ -61,7 +61,7 @@
       };
 
       function handleInputChange(inputName, value) {
-        console.log(`User typed "${value}" in ${inputName}`);
+        // console.log(`User typed "${value}" in ${inputName}`);
         setFormValues((prevValues) => ({
           ...prevValues,
           [inputName]: value,
@@ -182,6 +182,7 @@
     function InputForm({ formObj, handleInputChange, formValues }) {
       const iconLink = formObj ? `images/${formObj.icon}.svg` : '';
       const inputValue = formValues[formObj.title] || '';
+      
 
       const [isFocused, setIsFocused] = useState(false);
       const [isValid, setIsValid] = useState(true); // Add a state to track validity
